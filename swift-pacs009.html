@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pacs.009 — FI to FI Transfer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .swift-form { max-width: 1000px; margin: 0 auto; padding: 20px 0; }
+        .swift-form .form-section {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .swift-form .form-section h3 {
+            color: #f9a825;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            padding-bottom: 10px;
+        }
+        .swift-form .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+        .swift-form .form-group { margin-bottom: 12px; }
+        .swift-form .form-group label {
+            color: #888;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        .swift-form .form-group .field-tag {
+            color: #f9a825;
+            font-family: monospace;
+            font-size: 0.65rem;
+            background: rgba(249,168,37,0.08);
+            padding: 1px 8px;
+            border-radius: 4px;
+            margin-left: 6px;
+        }
+        .swift-form .form-input {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .swift-form .form-input:focus {
+            outline: none;
+            border-color: #f9a825;
+            background: rgba(255,255,255,0.06);
+        }
+        .swift-form .form-input.code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+        .swift-form .form-select {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .swift-form .form-select:focus {
+            outline: none;
+            border-color: #f9a825;
+            background: rgba(255,255,255,0.06);
+        }
+        .swift-form .form-select option { background: #1a1a1a; }
+        .swift-form .form-hint { color: #555; font-size: 0.65rem; margin-top: 4px; }
+        .swift-form .mandatory { color: #f44336; font-size: 0.6rem; }
+        .swift-form .xml-preview {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.65rem;
+            color: #888;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .btn-submit-swift {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f9a825, #e08e0b);
+            color: #0a0a0a;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+        .btn-submit-swift:hover { transform: scale(1.01); box-shadow: 0 8px 30px rgba(249,168,37,0.3); }
+        .btn-back {
+            display: inline-block;
+            padding: 10px 24px;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px;
+            color: #888;
+            text-decoration: none;
+            transition: 0.3s;
+            margin-bottom: 20px;
+        }
+        .btn-back:hover { border-color: #f9a825; color: #f9a825; }
+        .tag-badge {
+            background: rgba(33,150,243,0.1);
+            color: #2196f3;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            font-weight: 400;
+        }
+        @media (max-width: 768px) {
+            .swift-form .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<!-- ===== HEADER ===== -->
+<header>
+    <div class="container header-inner">
+        <a href="index.html" class="logo">
+            <img src="https://raw.githubusercontent.com/goldtether/pacs/main/pacs_logo.png" alt="PACS">
+            <span>PACS</span>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="tokenomics.html">Tokenomics</a>
+            <a href="buy-swift.html">Buy SWIFT</a>
+            <a href="swift-dashboard.html" class="active">SWIFT MX</a>
+            <a href="liquidity.html">Liquidity</a>
+            <a href="staking.html">Staking</a>
+            <a href="pay.html">PACS Pay</a>
+            <button class="btn-connect" onclick="alert('🔗 Connect wallet — coming soon!')">Connect Wallet</button>
+            <div class="lang-switcher">
+                <button class="lang-btn" id="langToggle">🌐 <span id="currentLangLabel">EN</span></button>
+                <div class="lang-dropdown" id="langDropdown">
+                    <button data-lang="en" class="active">🇬🇧 English</button>
+                    <button data-lang="ru">🇷🇺 Русский</button>
+                    <button data-lang="es">🇪🇸 Español</button>
+                    <button data-lang="fr">🇫🇷 Français</button>
+                    <button data-lang="de">🇩🇪 Deutsch</button>
+                    <button data-lang="zh">🇨🇳 中文</button>
+                    <button data-lang="ja">🇯🇵 日本語</button>
+                    <button data-lang="ko">🇰🇷 한국어</button>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<section style="padding: 120px 0 40px;">
+    <div class="container">
+        <a href="swift-dashboard.html" class="btn-back">← Back to Dashboard</a>
+        <h1 class="section-title"><span class="text-gold">pacs.009</span> FI to FI Transfer</h1>
+        <p class="section-subtitle">Financial Institution Credit Transfer — Interbank Payment</p>
+        <div style="text-align:center;color:#888;font-size:0.85rem;margin-top:-10px;">
+            <span class="tag-badge">ISO 20022</span> <span class="tag-badge">Interbank</span> <span class="tag-badge">No Customer Data</span>
+        </div>
+    </div>
+</section>
+
+<section style="padding: 20px 0 60px;">
+    <div class="container">
+        <div class="swift-form">
+
+            <div class="form-section">
+                <h3>🏦 FI to FI Transfer Details</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Message ID <span class="field-tag">&lt;MsgId&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" value="FI20260628001" />
+                    </div>
+                    <div class="form-group">
+                        <label>Creation Date/Time <span class="field-tag">&lt;CreDtTm&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="datetime-local" class="form-input" value="2026-06-28T10:30" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Number of Transactions <span class="field-tag">&lt;NbOfTxs&gt;</span></label>
+                        <input type="number" class="form-input" value="1" min="1" />
+                    </div>
+                    <div class="form-group">
+                        <label>Settlement Method <span class="field-tag">&lt;SttlmMtd&gt;</span> <span class="mandatory">*</span></label>
+                        <select class="form-select">
+                            <option value="INDA" selected>INDA — Instructed Agent</option>
+                            <option value="INGA">INGA — Instructing Agent</option>
+                            <option value="COVE">COVE — Cover Payment</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>🏛️ Sender (Debtor Agent)</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Sender BIC <span class="field-tag">&lt;DbtrAgt/BIC&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="BREXPLPWXXX" value="BREXPLPWXXX" />
+                    </div>
+                    <div class="form-group">
+                        <label>Sender Name <span class="field-tag">&lt;DbtrAgt/Nm&gt;</span></label>
+                        <input type="text" class="form-input" placeholder="Bank name" value="Bank Rozwoju Eksportu" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Sender Account <span class="field-tag">&lt;DbtrAcct/IBAN&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" value="PL61109010140000071219812874" />
+                    </div>
+                    <div class="form-group">
+                        <label>Sender Currency <span class="field-tag">&lt;Ccy&gt;</span></label>
+                        <select class="form-select">
+                            <option value="USD" selected>USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
+                            <option value="CHF">CHF</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>🏛️ Receiver (Creditor Agent)</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Receiver BIC <span class="field-tag">&lt;CdtrAgt/BIC&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="CHASUS33XXX" value="CHASUS33XXX" />
+                    </div>
+                    <div class="form-group">
+                        <label>Receiver Name <span class="field-tag">&lt;CdtrAgt/Nm&gt;</span></label>
+                        <input type="text" class="form-input" placeholder="Bank name" value="JPMorgan Chase" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Receiver Account <span class="field-tag">&lt;CdtrAcct/IBAN&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" value="CH7804835123456789012" />
+                    </div>
+                    <div class="form-group">
+                        <label>Intermediary BIC <span class="field-tag">&lt;IntrmyAgt&gt;</span> <span class="optional">(optional)</span></label>
+                        <input type="text" class="form-input code" placeholder="BIC of intermediary" value="" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>💰 Amount & Charges</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Amount <span class="field-tag">&lt;Amt&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="number" class="form-input" placeholder="5000000.00" value="5000000.00" step="0.01" />
+                    </div>
+                    <div class="form-group">
+                        <label>Charge Bearer <span class="field-tag">&lt;ChrgBr&gt;</span> <span class="mandatory">*</span></label>
+                        <select class="form-select">
+                            <option value="SHAR" selected>SHAR — Shared</option>
+                            <option value="DEBT">DEBT — Debtor (OUR)</option>
+                            <option value="CRED">CRED — Creditor (BEN)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Interbank Settlement Date <span class="field-tag">&lt;IntrBkSttlmDt&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="date" class="form-input" value="2026-06-30" />
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Purpose <span class="field-tag">&lt;Purp&gt;</span></label>
+                        <select class="form-select">
+                            <option value="">— Select —</option>
+                            <option value="CASH">CASH — Cash transfer</option>
+                            <option value="CORT">CORT — Corporate treasury</option>
+                            <option value="INTC">INTC — Intra-company</option>
+                            <option value="TRAD">TRAD — Trade</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>📄 XML Preview</h3>
+                <div class="xml-preview">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.009.001.08"&gt;
+  &lt;FIToFICstmrCdtTrf&gt;
+    &lt;GrpHdr&gt;
+      &lt;MsgId&gt;FI20260628001&lt;/MsgId&gt;
+      &lt;CreDtTm&gt;2026-06-28T10:30:00Z&lt;/CreDtTm&gt;
+      &lt;NbOfTxs&gt;1&lt;/NbOfTxs&gt;
+      &lt;SttlmInf&gt;
+        &lt;SttlmMtd&gt;INDA&lt;/SttlmMtd&gt;
+      &lt;/SttlmInf&gt;
+    &lt;/GrpHdr&gt;
+    &lt;TxInf&gt;
+      &lt;DbtrAgt&gt;
+        &lt;FinInstnId&gt;
+          &lt;BICFI&gt;BREXPLPWXXX&lt;/BICFI&gt;
+        &lt;/FinInstnId&gt;
+      &lt;/DbtrAgt&gt;
+      &lt;DbtrAcct&gt;
+        &lt;Id&gt;&lt;IBAN&gt;PL61109010140000071219812874&lt;/IBAN&gt;&lt;/Id&gt;
+      &lt;/DbtrAcct&gt;
+      &lt;CdtrAgt&gt;
+        &lt;FinInstnId&gt;
+          &lt;BICFI&gt;CHASUS33XXX&lt;/BICFI&gt;
+        &lt;/FinInstnId&gt;
+      &lt;/CdtrAgt&gt;
+      &lt;CdtrAcct&gt;
+        &lt;Id&gt;&lt;IBAN&gt;CH7804835123456789012&lt;/IBAN&gt;&lt;/Id&gt;
+      &lt;/CdtrAcct&gt;
+      &lt;Amt&gt;5000000.00&lt;/Amt&gt;
+      &lt;ChrgBr&gt;SHAR&lt;/ChrgBr&gt;
+    &lt;/TxInf&gt;
+  &lt;/FIToFICstmrCdtTrf&gt;
+&lt;/Document&gt;
+                </div>
+            </div>
+
+            <button class="btn-submit-swift" onclick="submitPayment()">🚀 Submit FI Transfer</button>
+            <div id="result" style="text-align:center;margin-top:12px;font-size:0.9rem;color:#888;"></div>
+
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="socials">
+            <a href="#">🐦 Twitter</a>
+            <a href="#">💬 Telegram</a>
+            <a href="#">📊 GeckoTerminal</a>
+            <a href="#">📈 CoinGecko</a>
+        </div>
+        <p style="margin-top:20px; color:#444;">© 2026 PACS Protocol. Built on Solana.</p>
+    </div>
+</footer>
+
+<script>
+    function submitPayment() {
+        const result = document.getElementById('result');
+        result.textContent = '⏳ Processing FI Transfer...';
+        result.style.color = '#f9a825';
+        setTimeout(() => {
+            result.innerHTML = '✅ FI Transfer Submitted!<br><span style="font-size:0.8rem;color:#888;">Reference: <span style="color:#f9a825;">FI20260628001</span></span>';
+            result.style.color = '#4caf50';
+        }, 1500);
+    }
+
+    // Language switcher (краткая версия)
+    const translations = {
+        en: { 'nav-home': 'Home','nav-about':'About','nav-tokenomics':'Tokenomics','nav-buy-swift':'Buy SWIFT','nav-swift':'SWIFT MX','nav-liquidity':'Liquidity','nav-staking':'Staking','nav-pay':'PACS Pay','connect-wallet':'Connect Wallet' },
+        ru: { 'nav-home':'Главная','nav-about':'О токене','nav-tokenomics':'Токеномика','nav-buy-swift':'Купить SWIFT','nav-swift':'SWIFT MX','nav-liquidity':'Ликвидность','nav-staking':'Стейкинг','nav-pay':'PACS Pay','connect-wallet':'Подключить кошелёк' }
+    };
+
+    let currentLang = localStorage.getItem('pacsLang') || 'en';
+    function applyLanguage(lang) {
+        if (!translations[lang]) return;
+        const t = translations[lang];
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (t[key]) el.textContent = t[key];
+        });
+        document.getElementById('currentLangLabel').textContent = lang.toUpperCase();
+        localStorage.setItem('pacsLang', lang);
+    }
+    document.getElementById('langToggle').addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.getElementById('langDropdown').classList.toggle('show');
+    });
+    document.addEventListener('click', () => {
+        document.getElementById('langDropdown').classList.remove('show');
+    });
+    document.querySelectorAll('.lang-dropdown button').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            applyLanguage(btn.dataset.lang);
+            document.getElementById('langDropdown').classList.remove('show');
+        });
+    });
+    applyLanguage(currentLang);
+</script>
+
+</body>
+</html>

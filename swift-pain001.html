@@ -7,6 +7,122 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0a0a0a; color: #fff; font-family: 'Inter', sans-serif; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .glow-1 { width: 600px; height: 600px; background: rgba(249,168,37,0.04); top: -200px; right: -200px; }
+        .glow-2 { width: 500px; height: 500px; background: rgba(249,168,37,0.03); bottom: -200px; left: -200px; }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10,10,10,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            padding: 12px 0;
+        }
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 800;
+            font-size: 1.3rem;
+        }
+        .logo img { height: 32px; width: auto; }
+        .logo span { color: #f9a825; }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+        .nav-links a:hover { color: #f9a825; }
+        .nav-links a.active { color: #f9a825; }
+        .btn-connect {
+            background: linear-gradient(135deg, #f9a825, #e08e0b);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            color: #0a0a0a;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-connect:hover { transform: scale(1.05); }
+        .lang-switcher { position: relative; }
+        .lang-btn {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 6px 12px;
+            border-radius: 8px;
+            color: #888;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .lang-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 8px;
+            display: none;
+            min-width: 140px;
+            z-index: 200;
+        }
+        .lang-dropdown.show { display: block; }
+        .lang-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 6px 12px;
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.8rem;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+        .lang-dropdown button:hover { background: rgba(255,255,255,0.04); color: #fff; }
+        .lang-dropdown button.active { color: #f9a825; }
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        .text-gold { color: #f9a825; }
         .swift-form { max-width: 1000px; margin: 0 auto; padding: 20px 0; }
         .swift-form .form-section {
             background: rgba(255,255,255,0.02);
@@ -134,7 +250,19 @@
             font-size: 0.6rem;
             font-weight: 400;
         }
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 40px;
+            text-align: center;
+        }
+        .socials { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
+        .socials a { color: #666; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .socials a:hover { color: #f9a825; }
         @media (max-width: 768px) {
+            .nav-links { gap: 12px; flex-wrap: wrap; }
+            .nav-links a { font-size: 0.75rem; }
+            .section-title { font-size: 2rem; }
             .swift-form .form-row { grid-template-columns: 1fr; }
         }
     </style>
@@ -318,31 +446,15 @@
       &lt;PmtInfId&gt;PAY-001&lt;/PmtInfId&gt;
       &lt;PmtMtd&gt;TRF&lt;/PmtMtd&gt;
       &lt;ReqdExctnDt&gt;2026-06-30&lt;/ReqdExctnDt&gt;
-      &lt;Dbtr&gt;
-        &lt;Nm&gt;FIRMA SP.Z.O.O&lt;/Nm&gt;
-      &lt;/Dbtr&gt;
-      &lt;DbtrAcct&gt;
-        &lt;Id&gt;&lt;IBAN&gt;PL61109010140000071219812874&lt;/IBAN&gt;&lt;/Id&gt;
-      &lt;/DbtrAcct&gt;
-      &lt;DbtrAgt&gt;
-        &lt;FinInstnId&gt;&lt;BICFI&gt;BREXPLPWXXX&lt;/BICFI&gt;&lt;/FinInstnId&gt;
-      &lt;/DbtrAgt&gt;
-      &lt;Cdtr&gt;
-        &lt;Nm&gt;COMPANY LTD&lt;/Nm&gt;
-      &lt;/Cdtr&gt;
-      &lt;CdtrAcct&gt;
-        &lt;Id&gt;&lt;IBAN&gt;CH7804835123456789012&lt;/IBAN&gt;&lt;/Id&gt;
-      &lt;/CdtrAcct&gt;
-      &lt;CdtrAgt&gt;
-        &lt;FinInstnId&gt;&lt;BICFI&gt;CHASUS33XXX&lt;/BICFI&gt;&lt;/FinInstnId&gt;
-      &lt;/CdtrAgt&gt;
-      &lt;Amt&gt;
-        &lt;InstdAmt Ccy="USD"&gt;5000.00&lt;/InstdAmt&gt;
-      &lt;/Amt&gt;
+      &lt;Dbtr&gt;&lt;Nm&gt;FIRMA SP.Z.O.O&lt;/Nm&gt;&lt;/Dbtr&gt;
+      &lt;DbtrAcct&gt;&lt;Id&gt;&lt;IBAN&gt;PL61109010140000071219812874&lt;/IBAN&gt;&lt;/Id&gt;&lt;/DbtrAcct&gt;
+      &lt;DbtrAgt&gt;&lt;FinInstnId&gt;&lt;BICFI&gt;BREXPLPWXXX&lt;/BICFI&gt;&lt;/FinInstnId&gt;&lt;/DbtrAgt&gt;
+      &lt;Cdtr&gt;&lt;Nm&gt;COMPANY LTD&lt;/Nm&gt;&lt;/Cdtr&gt;
+      &lt;CdtrAcct&gt;&lt;Id&gt;&lt;IBAN&gt;CH7804835123456789012&lt;/IBAN&gt;&lt;/Id&gt;&lt;/CdtrAcct&gt;
+      &lt;CdtrAgt&gt;&lt;FinInstnId&gt;&lt;BICFI&gt;CHASUS33XXX&lt;/BICFI&gt;&lt;/FinInstnId&gt;&lt;/CdtrAgt&gt;
+      &lt;Amt&gt;&lt;InstdAmt Ccy="USD"&gt;5000.00&lt;/InstdAmt&gt;&lt;/Amt&gt;
       &lt;ChrgBr&gt;SHAR&lt;/ChrgBr&gt;
-      &lt;RmtInf&gt;
-        &lt;Ustrd&gt;INVOICE 1/2025 — PACS Purchase&lt;/Ustrd&gt;
-      &lt;/RmtInf&gt;
+      &lt;RmtInf&gt;&lt;Ustrd&gt;INVOICE 1/2025 — PACS Purchase&lt;/Ustrd&gt;&lt;/RmtInf&gt;
     &lt;/PmtInf&gt;
   &lt;/CstmrCdtTrfInitn&gt;
 &lt;/Document&gt;
@@ -361,7 +473,7 @@
         <div class="socials">
             <a href="#">🐦 Twitter</a>
             <a href="#">💬 Telegram</a>
-            <a href="#">📊 GeckoTerminal</a>
+            <a href="https://www.geckoterminal.com/solana/pools/BGix6rhfC9mGVpdKrhYA5VqLABQ4kFpLkBmygRxfAB4g" target="_blank">📊 GeckoTerminal</a>
             <a href="#">📈 CoinGecko</a>
         </div>
         <p style="margin-top:20px; color:#444;">© 2026 PACS Protocol. Built on Solana.</p>
@@ -379,7 +491,6 @@
         }, 1500);
     }
 
-    // Language switcher
     const translations = {
         en: { 'nav-home': 'Home','nav-about':'About','nav-tokenomics':'Tokenomics','nav-buy-swift':'Buy SWIFT','nav-swift':'SWIFT MX','nav-liquidity':'Liquidity','nav-staking':'Staking','nav-pay':'PACS Pay','connect-wallet':'Connect Wallet' },
         ru: { 'nav-home':'Главная','nav-about':'О токене','nav-tokenomics':'Токеномика','nav-buy-swift':'Купить SWIFT','nav-swift':'SWIFT MX','nav-liquidity':'Ликвидность','nav-staking':'Стейкинг','nav-pay':'PACS Pay','connect-wallet':'Подключить кошелёк' }

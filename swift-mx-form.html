@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SWIFT MX Payment Form — PACS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .swift-form {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+        .swift-form .form-section {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .swift-form .form-section h3 {
+            color: #f9a825;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            padding-bottom: 10px;
+        }
+        .swift-form .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+        .swift-form .form-group { margin-bottom: 12px; }
+        .swift-form .form-group label {
+            color: #888;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        .swift-form .form-group .field-tag {
+            color: #f9a825;
+            font-family: monospace;
+            font-size: 0.7rem;
+            background: rgba(249,168,37,0.08);
+            padding: 1px 8px;
+            border-radius: 4px;
+            margin-left: 6px;
+        }
+        .swift-form .form-input {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .swift-form .form-input:focus {
+            outline: none;
+            border-color: #f9a825;
+            background: rgba(255,255,255,0.06);
+        }
+        .swift-form .form-input::placeholder { color: #444; }
+        .swift-form .form-input.code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        .swift-form .form-select {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .swift-form .form-select:focus {
+            outline: none;
+            border-color: #f9a825;
+            background: rgba(255,255,255,0.06);
+        }
+        .swift-form .form-select option { background: #1a1a1a; }
+
+        .swift-form .form-hint {
+            color: #555;
+            font-size: 0.7rem;
+            margin-top: 4px;
+        }
+        .swift-form .form-hint .code-example {
+            color: #f9a825;
+            font-family: monospace;
+        }
+
+        .swift-form .xml-preview {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
+            color: #888;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .swift-form .xml-preview .tag { color: #f9a825; }
+        .swift-form .xml-preview .value { color: #4caf50; }
+        .swift-form .xml-preview .attr { color: #f9a825; }
+
+        .btn-submit-swift {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f9a825, #e08e0b);
+            color: #0a0a0a;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+        .btn-submit-swift:hover { transform: scale(1.01); box-shadow: 0 8px 30px rgba(249,168,37,0.3); }
+
+        .swift-form .mandatory { color: #f44336; font-size: 0.65rem; }
+        .swift-form .optional { color: #666; font-size: 0.65rem; }
+
+        @media (max-width: 768px) {
+            .swift-form .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<!-- ===== HEADER ===== -->
+<header>
+    <div class="container header-inner">
+        <a href="index.html" class="logo">
+            <img src="https://raw.githubusercontent.com/goldtether/pacs/main/pacs_logo.png" alt="PACS">
+            <span>PACS</span>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html" data-i18n="nav-home">Home</a>
+            <a href="about.html" data-i18n="nav-about">About</a>
+            <a href="tokenomics.html" data-i18n="nav-tokenomics">Tokenomics</a>
+            <a href="buy-swift.html" data-i18n="nav-buy-swift">Buy SWIFT</a>
+            <a href="swift-mx-form.html" class="active" data-i18n="nav-swift-mx">SWIFT MX Form</a>
+            <a href="liquidity.html" data-i18n="nav-liquidity">Liquidity</a>
+            <a href="staking.html" data-i18n="nav-staking">Staking</a>
+            <a href="pay.html" data-i18n="nav-pay">PACS Pay</a>
+            <a href="blog.html" data-i18n="nav-blog">Blog</a>
+            <a href="team.html" data-i18n="nav-team">Team</a>
+            <a href="gallery.html" data-i18n="nav-gallery">Gallery</a>
+            <button class="btn-connect" onclick="alert('🔗 Connect wallet — coming soon!')" data-i18n="connect-wallet">Connect Wallet</button>
+            <div class="lang-switcher">
+                <button class="lang-btn" id="langToggle">🌐 <span id="currentLangLabel">EN</span></button>
+                <div class="lang-dropdown" id="langDropdown">
+                    <button data-lang="en" class="active">🇬🇧 English</button>
+                    <button data-lang="ru">🇷🇺 Русский</button>
+                    <button data-lang="es">🇪🇸 Español</button>
+                    <button data-lang="fr">🇫🇷 Français</button>
+                    <button data-lang="de">🇩🇪 Deutsch</button>
+                    <button data-lang="zh">🇨🇳 中文</button>
+                    <button data-lang="ja">🇯🇵 日本語</button>
+                    <button data-lang="ko">🇰🇷 한국어</button>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<section style="padding: 120px 0 40px;">
+    <div class="container">
+        <h1 class="section-title"><span class="text-gold">SWIFT MX</span> Payment Form</h1>
+        <p class="section-subtitle">pacs.008.001.08 — FI to FI Customer Credit Transfer</p>
+        <div style="text-align:center;color:#888;font-size:0.85rem;margin-top:-10px;">
+            ⚡ Equivalent to MT103 • ISO 20022 XML Format
+        </div>
+    </div>
+</section>
+
+<!-- ===== SWIFT MX FORM ===== -->
+<section style="padding: 20px 0 60px;">
+    <div class="container">
+        <div class="swift-form">
+
+            <!-- ===== STEP 1: MESSAGE HEADER ===== -->
+            <div class="form-section">
+                <h3>📨 1. Message Header <span class="optional">(AppHdr)</span></h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Sender BIC <span class="field-tag">&lt;Fr/BIC&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="e.g. BREXPLPWXXX" value="BREXPLPWXXX" />
+                        <div class="form-hint">Your bank's BIC code</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Receiver BIC <span class="field-tag">&lt;To/BIC&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="e.g. CHASUS33XXX" value="CHASUS33XXX" />
+                        <div class="form-hint">Beneficiary bank's BIC code</div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Business Message ID <span class="field-tag">&lt;BizMsgIdr&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="e.g. TO20260628001" value="TO20260628001" />
+                        <div class="form-hint">Unique identifier for this message</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Message Definition ID <span class="field-tag">&lt;MsgDefIdr&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="pacs.008.001.08" value="pacs.008.001.08" />
+                        <div class="form-hint">Always <span class="code-example">pacs.008.001.08</span></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Business Service <span class="field-tag">&lt;BizSvc&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="swift.cbprplus.02" value="swift.cbprplus.02" />
+                        <div class="form-hint">Always <span class="code-example">swift.cbprplus.02</span></div>
+                    </div>
+                    <div class="form-group">
+                        <label>UETR <span class="field-tag">&lt;UETR&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="a85f1801-130b-4f7d-ac7b-4de982c16674" value="a85f1801-130b-4f7d-ac7b-4de982c16674" />
+                        <div class="form-hint">Unique End-to-End Transaction Reference</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== STEP 2: PAYMENT INFO ===== -->
+            <div class="form-section">
+                <h3>💳 2. Payment Information <span class="optional">(CdtTrfTxInf)</span></h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Instruction ID <span class="field-tag">&lt;InstrId&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="e.g. INSTR-2026-001" value="INSTR-2026-001" />
+                        <div class="form-hint">Internal reference (max 16 chars)</div>
+                    </div>
+                    <div class="form-group">
+                        <label>End-to-End ID <span class="field-tag">&lt;EndToEndId&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="e.g. E2E-2026-001" value="E2E-2026-001" />
+                        <div class="form-hint">Passed unchanged (max 35 chars)</div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Instructed Amount <span class="field-tag">&lt;InstdAmt&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input" placeholder="e.g. 5000.00" value="5000.00" />
+                        <div class="form-hint">Amount in currency below</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Currency <span class="field-tag">&lt;Ccy&gt;</span> <span class="mandatory">*</span></label>
+                        <select class="form-select">
+                            <option value="USD" selected>USD - US Dollar</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="GBP">GBP - British Pound</option>
+                            <option value="CHF">CHF - Swiss Franc</option>
+                            <option value="JPY">JPY - Japanese Yen</option>
+                            <option value="CAD">CAD - Canadian Dollar</option>
+                            <option value="AUD">AUD - Australian Dollar</option>
+                            <option value="CNY">CNY - Chinese Yuan</option>
+                            <option value="SGD">SGD - Singapore Dollar</option>
+                            <option value="HKD">HKD - Hong Kong Dollar</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Settlement Method <span class="field-tag">&lt;SttlmMtd&gt;</span> <span class="mandatory">*</span></label>
+                        <select class="form-select">
+                            <option value="INDA" selected>INDA — Instructed Agent</option>
+                            <option value="INGA">INGA — Instructing Agent</option>
+                            <option value="COVE">COVE — Cover Payment</option>
+                        </select>
+                        <div class="form-hint">INDA: settlement account held with beneficiary bank</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Charge Bearer <span class="field-tag">&lt;ChrgBr&gt;</span> <span class="mandatory">*</span></label>
+                        <select class="form-select">
+                            <option value="SHAR" selected>SHAR — Shared (SHA)</option>
+                            <option value="DEBT">DEBT — Debtor (OUR)</option>
+                            <option value="CRED">CRED — Creditor (BEN)</option>
+                        </select>
+                        <div class="form-hint">SHA: charges split, OUR: sender pays all, BEN: receiver pays all</div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Interbank Settlement Date <span class="field-tag">&lt;IntrBkSttlmDt&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="date" class="form-input" value="2026-06-30" />
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Purpose <span class="field-tag">&lt;Purp&gt;</span> <span class="optional">(optional)</span></label>
+                        <select class="form-select">
+                            <option value="">— Select purpose —</option>
+                            <option value="BONU">BONU — Bonus payment</option>
+                            <option value="TAXS">TAXS — Tax payment</option>
+                            <option value="SALA">SALA — Salary</option>
+                            <option value="INTC">INTC — Intra-company payment</option>
+                            <option value="DIVI">DIVI — Dividend</option>
+                            <option value="TRAD">TRAD — Trade settlement</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== STEP 3: DEBTOR (PAYER) ===== -->
+            <div class="form-section">
+                <h3>👤 3. Debtor (Payer) <span class="field-tag">&lt;Dbtr&gt;</span> <span class="mandatory">*</span></h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Debtor Name <span class="field-tag">&lt;Nm&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input" placeholder="Full legal name" value="FIRMA SP.Z.O.O" />
+                    </div>
+                    <div class="form-group">
+                        <label>Debtor Account (IBAN) <span class="field-tag">&lt;IBAN&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="e.g. PL61109010140000071219812874" value="PL61109010140000071219812874" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Street <span class="field-tag">&lt;StreetNm&gt;</span></label>
+                        <input type="text" class="form-input" placeholder="Street name" value="Miejska" />
+                    </div>
+                    <div class="form-group">
+                        <label>Building Number <span class="field-tag">&lt;BldgNb&gt;</span></label>
+                        <input type="text" class="form-input" placeholder="1" value="1" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>City <span class="field-tag">&lt;TwnNm&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input" placeholder="City" value="Warszawa" />
+                    </div>
+                    <div class="form-group">
+                        <label>Postal Code <span class="field-tag">&lt;PstCd&gt;</span></label>
+                        <input type="text" class="form-input" placeholder="99-999" value="99-999" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Country <span class="field-tag">&lt;Ctry&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="PL" value="PL" />
+                    </div>
+                    <div class="form-group">
+                        <label>Country Sub-Division <span class="field-tag">&lt;CtrySubDvsn&gt;</span></label>
+                        <input type="text" class="form-input" placeholder="e.g. Mazowieckie" value="Mazowieckie" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Debtor Bank BIC <span class="field-tag">&lt;DbtrAgt/BIC&gt;</span> <span class="mandatory">*</span></label>
+                    <input type="text" class="form-input code" placeholder="e.g. BREXPLPWXXX" value="BREXPLPWXXX" />
+                    <div class="form-hint">Bank holding the debtor's account</div>
+                </div>
+            </div>
+
+            <!-- ===== STEP 4: CREDITOR (BENEFICIARY) ===== -->
+            <div class="form-section">
+                <h3>🏦 4. Creditor (Beneficiary) <span class="field-tag">&lt;Cdtr&gt;</span> <span class="mandatory">*</span></h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Creditor Name <span class="field-tag">&lt;Nm&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input" placeholder="Full legal name" value="COMPANY LTD" />
+                    </div>
+                    <div class="form-group">
+                        <label>Creditor Account (IBAN) <span class="field-tag">&lt;IBAN&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="e.g. CH7804835123456789012" value="CH7804835123456789012" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Street <span class="field-tag">&lt;StreetNm&gt;</span></label>
+                        <input type="text" class="form-input" placeholder="Street name" value="Main Street" />
+                    </div>
+                    <div class="form-group">
+                        <label>Building Number <span class="field-tag">&lt;BldgNb&gt;</span></label>
+                        <input type="text" class="form-input" placeholder="1" value="12" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>City <span class="field-tag">&lt;TwnNm&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input" placeholder="City" value="Chicago" />
+                    </div>
+                    <div class="form-group">
+                        <label>Postal Code <span class="field-tag">&lt;PstCd&gt;</span></label>
+                        <input type="text" class="form-input" placeholder="123-1231" value="123-1231" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Country <span class="field-tag">&lt;Ctry&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="US" value="US" />
+                    </div>
+                    <div class="form-group">
+                        <label>Creditor Bank BIC <span class="field-tag">&lt;CdtrAgt/BIC&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="e.g. CHASUS33XXX" value="CHASUS33XXX" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== STEP 5: REMITTANCE INFO ===== -->
+            <div class="form-section">
+                <h3>📝 5. Remittance Information <span class="field-tag">&lt;RmtInf&gt;</span> <span class="optional">(optional)</span></h3>
+                <div class="form-group">
+                    <label>Unstructured <span class="field-tag">&lt;Ustrd&gt;</span></label>
+                    <input type="text" class="form-input" placeholder="e.g. INVOICE 1/2025" value="INVOICE 1/2025 — PACS Purchase" />
+                    <div class="form-hint">Reference or description for the beneficiary</div>
+                </div>
+                <div class="form-group" style="margin-top:8px;">
+                    <label>Structured <span class="field-tag">&lt;Strd&gt;</span></label>
+                    <input type="text" class="form-input" placeholder="e.g. /RFB/1234567890" value="/RFB/1234567890" />
+                    <div class="form-hint">Structured reference like invoice number</div>
+                </div>
+            </div>
+
+            <!-- ===== STEP 6: XML PREVIEW ===== -->
+            <div class="form-section">
+                <h3>📄 6. XML Message Preview</h3>
+                <div class="xml-preview" id="xmlPreview">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.008.001.08"&gt;
+  &lt;FIToFICstmrCdtTrf&gt;
+    &lt;GrpHdr&gt;
+      &lt;MsgId&gt;TO20260628001&lt;/MsgId&gt;
+      &lt;CreDtTm&gt;2026-06-28T10:30:00Z&lt;/CreDtTm&gt;
+      &lt;NbOfTxs&gt;1&lt;/NbOfTxs&gt;
+      &lt;SttlmInf&gt;
+        &lt;SttlmMtd&gt;INDA&lt;/SttlmMtd&gt;
+      &lt;/SttlmInf&gt;
+    &lt;/GrpHdr&gt;
+    &lt;CdtTrfTxInf&gt;
+      &lt;PmtId&gt;
+        &lt;InstrId&gt;INSTR-2026-001&lt;/InstrId&gt;
+        &lt;EndToEndId&gt;E2E-2026-001&lt;/EndToEndId&gt;
+        &lt;UETR&gt;a85f1801-130b-4f7d-ac7b-4de982c16674&lt;/UETR&gt;
+      &lt;/PmtId&gt;
+      &lt;Amt&gt;
+        &lt;InstdAmt Ccy="USD"&gt;5000.00&lt;/InstdAmt&gt;
+      &lt;/Amt&gt;
+      &lt;ChrgBr&gt;SHAR&lt;/ChrgBr&gt;
+      &lt;Dbtr&gt;
+        &lt;Nm&gt;FIRMA SP.Z.O.O&lt;/Nm&gt;
+        &lt;PstlAdr&gt;
+          &lt;StreetNm&gt;Miejska&lt;/StreetNm&gt;
+          &lt;BldgNb&gt;1&lt;/BldgNb&gt;
+          &lt;TwnNm&gt;Warszawa&lt;/TwnNm&gt;
+          &lt;Ctry&gt;PL&lt;/Ctry&gt;
+        &lt;/PstlAdr&gt;
+      &lt;/Dbtr&gt;
+      &lt;DbtrAcct&gt;
+        &lt;Id&gt;
+          &lt;IBAN&gt;PL61109010140000071219812874&lt;/IBAN&gt;
+        &lt;/Id&gt;
+      &lt;/DbtrAcct&gt;
+      &lt;DbtrAgt&gt;
+        &lt;FinInstnId&gt;
+          &lt;BICFI&gt;BREXPLPWXXX&lt;/BICFI&gt;
+        &lt;/FinInstnId&gt;
+      &lt;/DbtrAgt&gt;
+      &lt;Cdtr&gt;
+        &lt;Nm&gt;COMPANY LTD&lt;/Nm&gt;
+        &lt;PstlAdr&gt;
+          &lt;StreetNm&gt;Main Street&lt;/StreetNm&gt;
+          &lt;BldgNb&gt;12&lt;/BldgNb&gt;
+          &lt;TwnNm&gt;Chicago&lt;/TwnNm&gt;
+          &lt;Ctry&gt;US&lt;/Ctry&gt;
+        &lt;/PstlAdr&gt;
+      &lt;/Cdtr&gt;
+      &lt;CdtrAcct&gt;
+        &lt;Id&gt;
+          &lt;IBAN&gt;CH7804835123456789012&lt;/IBAN&gt;
+        &lt;/Id&gt;
+      &lt;/CdtrAcct&gt;
+      &lt;CdtrAgt&gt;
+        &lt;FinInstnId&gt;
+          &lt;BICFI&gt;CHASUS33XXX&lt;/BICFI&gt;
+        &lt;/FinInstnId&gt;
+      &lt;/CdtrAgt&gt;
+      &lt;RmtInf&gt;
+        &lt;Ustrd&gt;INVOICE 1/2025 — PACS Purchase&lt;/Ustrd&gt;
+      &lt;/RmtInf&gt;
+    &lt;/CdtTrfTxInf&gt;
+  &lt;/FIToFICstmrCdtTrf&gt;
+&lt;/Document&gt;
+                </div>
+            </div>
+
+            <!-- ===== SUBMIT ===== -->
+            <button class="btn-submit-swift" onclick="submitSwiftForm()">🚀 Submit SWIFT MX Payment</button>
+            <div id="result" style="text-align:center;margin-top:12px;font-size:0.9rem;color:#888;"></div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ===== 50 000+ ФУНКЦИЙ ===== -->
+<section class="functions-section">
+    <div class="container">
+        <h2 class="section-title">⚡ <span class="text-gold">50 000+</span> Functions</h2>
+        <p class="subtitle">All functions work in real-time — automatically generated with unique links</p>
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card"><div class="number" id="totalFunctions">0</div><div class="label" data-i18n="functions-total">Total Functions</div></div>
+            <div class="stat-card"><div class="number" id="activeFunctions">0</div><div class="label" data-i18n="functions-active">Active Functions</div></div>
+            <div class="stat-card"><div class="number" id="categoriesCount">0</div><div class="label" data-i18n="functions-categories">Categories</div></div>
+            <div class="stat-card"><div class="number" id="generatedAt">—</div><div class="label" data-i18n="functions-generated">Generated</div></div>
+        </div>
+        <div class="generator-info">
+            <span>⚙️ <strong data-i18n="functions-generator">Function Generator</strong> <code data-i18n="functions-generator-desc">input → output → unique link</code></span>
+            <button class="btn-test" onclick="regenerateFunctions()" data-i18n="functions-regenerate">🔄 Regenerate</button>
+        </div>
+        <div class="functions-grid" id="functionsGrid"></div>
+    </div>
+</section>
+
+<div class="container contract-box">
+    <div class="label" data-i18n="contract-label">Contract Address</div>
+    <code>ECCThUdLFz6uSerk37U9fVYs2HRjVXKUAGyynJyewWEf</code>
+    <div class="pool-link">
+        <a href="https://www.geckoterminal.com/solana/pools/BGix6rhfC9mGVpdKrhYA5VqLABQ4kFpLkBmygRxfAB4g" target="_blank" data-i18n="contract-link">🔗 View Pool on GeckoTerminal</a>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="socials">
+            <a href="#" target="_blank" data-i18n="footer-twitter">🐦 Twitter</a>
+            <a href="#" target="_blank" data-i18n="footer-telegram">💬 Telegram</a>
+            <a href="https://www.geckoterminal.com/solana/pools/BGix6rhfC9mGVpdKrhYA5VqLABQ4kFpLkBmygRxfAB4g" target="_blank" data-i18n="footer-gecko">📊 GeckoTerminal</a>
+            <a href="#" target="_blank" data-i18n="footer-coingecko">📈 CoinGecko</a>
+            <a href="#" target="_blank" data-i18n="footer-medium">📝 Medium</a>
+            <a href="#" target="_blank" data-i18n="footer-github">🔗 GitHub</a>
+        </div>
+        <p style="margin-top:20px; color:#444;" data-i18n="footer-copy">© 2026 PACS Protocol. Built on Solana.</p>
+    </div>
+</footer>
+
+<script>
+    function submitSwiftForm() {
+        const result = document.getElementById('result');
+        result.textContent = '⏳ Processing SWIFT MX payment...';
+        result.style.color = '#f9a825';
+
+        setTimeout(() => {
+            result.innerHTML = '✅ SWIFT MX Payment Submitted!<br><span style="font-size:0.8rem;color:#888;">Transaction Reference: <span style="color:#f9a825;">TO20260628001</span></span>';
+            result.style.color = '#4caf50';
+        }, 2000);
+    }
+
+    // ===== ПЕРЕВОДЧИК =====
+    const translations = {
+        en: {
+            'nav-home': 'Home','nav-about':'About','nav-tokenomics':'Tokenomics',
+            'nav-buy-swift':'Buy SWIFT','nav-swift-mx':'SWIFT MX Form',
+            'nav-liquidity':'Liquidity','nav-staking':'Staking','nav-pay':'PACS Pay',
+            'nav-blog':'Blog','nav-team':'Team','nav-gallery':'Gallery',
+            'connect-wallet':'Connect Wallet',
+            'functions-total':'Total Functions','functions-active':'Active Functions',
+            'functions-categories':'Categories','functions-generated':'Generated',
+            'functions-generator':'Function Generator','functions-generator-desc':'input → output → unique link',
+            'functions-regenerate':'🔄 Regenerate',
+            'contract-label':'Contract Address','contract-link':'🔗 View Pool on GeckoTerminal',
+            'footer-twitter':'🐦 Twitter','footer-telegram':'💬 Telegram',
+            'footer-gecko':'📊 GeckoTerminal','footer-coingecko':'📈 CoinGecko',
+            'footer-medium':'📝 Medium','footer-github':'🔗 GitHub',
+            'footer-copy':'© 2026 PACS Protocol. Built on Solana.'
+        },
+        ru: {
+            'nav-home':'Главная','nav-about':'О токене','nav-tokenomics':'Токеномика',
+            'nav-b

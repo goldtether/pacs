@@ -71,6 +71,23 @@
             transition: 0.3s;
         }
         .btn-gold:hover { transform: scale(1.01); box-shadow: 0 8px 30px rgba(249,168,37,0.3); }
+        .btn-gold:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-outline-gold {
+            width: 100%;
+            padding: 14px;
+            border: 1.5px solid #f9a825;
+            border-radius: 12px;
+            background: transparent;
+            color: #f9a825;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+            display: block;
+            text-decoration: none;
+        }
+        .btn-outline-gold:hover { background: rgba(249,168,37,0.05); }
         .steps {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -82,13 +99,48 @@
         .steps .step h4 { color: #fff; font-size: 1rem; margin-top: 4px; }
         .steps .step p { color: #888; font-size: 0.85rem; margin-top: 4px; }
         .info-box { background: rgba(249,168,37,0.05); border: 1px solid rgba(249,168,37,0.1); border-radius: 16px; padding: 16px 20px; margin-top: 16px; }
-        .info-box p { color: #888; font-size: 0.9rem; }
+        .info-box p { color: #888; font-size: 0.9rem; margin: 4px 0; }
         .info-box strong { color: #f9a825; }
+        .info-box .pacs-amount { font-size: 1.8rem; font-weight: 900; color: #f9a825; text-align: center; display: block; margin: 8px 0; }
         .payment-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
         .payment-methods .pm { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; padding: 16px; text-align: center; }
         .payment-methods .pm .icon { font-size: 2rem; }
         .payment-methods .pm .name { color: #fff; font-weight: 600; font-size: 0.95rem; }
         .payment-methods .pm .desc { color: #888; font-size: 0.75rem; }
+        .mx-link-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(249,168,37,0.08);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-top: 16px;
+            text-align: center;
+        }
+        .mx-link-box .mx-title {
+            color: #f9a825;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+        }
+        .mx-link-box .mx-desc {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .mx-link-box .btn-outline-gold {
+            display: inline-block;
+            width: auto;
+            padding: 10px 32px;
+            margin-top: 10px;
+        }
+        .pacs-calculator {
+            background: rgba(249,168,37,0.03);
+            border: 1px solid rgba(249,168,37,0.06);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 12px;
+            text-align: center;
+        }
+        .pacs-calculator .label { color: #888; font-size: 0.8rem; }
+        .pacs-calculator .value { font-size: 2rem; font-weight: 900; color: #f9a825; }
         @media (max-width: 768px) {
             .buy-grid { grid-template-columns: 1fr; }
             .steps { grid-template-columns: 1fr; }
@@ -113,6 +165,7 @@
             <a href="about.html" data-i18n="nav-about">About</a>
             <a href="tokenomics.html" data-i18n="nav-tokenomics">Tokenomics</a>
             <a href="buy-swift.html" class="active" data-i18n="nav-buy-swift">Buy SWIFT</a>
+            <a href="swift-mx-form.html" data-i18n="nav-swift-mx">SWIFT MX</a>
             <a href="liquidity.html" data-i18n="nav-liquidity">Liquidity</a>
             <a href="staking.html" data-i18n="nav-staking">Staking</a>
             <a href="pay.html" data-i18n="nav-pay">PACS Pay</a>
@@ -188,7 +241,7 @@
                     </div>
                     <div class="form-group">
                         <label>Amount (USD/EUR)</label>
-                        <input type="number" id="amount" class="form-input" placeholder="Minimum $5,000 / €5,000" min="5000" step="100" required />
+                        <input type="number" id="amount" class="form-input" placeholder="Minimum $5,000 / €5,000" min="5000" step="100" required oninput="updatePacsAmount()" />
                     </div>
                     <div class="form-group">
                         <label>Payment Method</label>
@@ -205,7 +258,15 @@
                         <label>Your Full Name</label>
                         <input type="text" id="name" class="form-input" placeholder="Enter your full name" required />
                     </div>
-                    <button type="submit" class="btn-gold">🚀 Submit Order</button>
+                    
+                    <!-- ===== КАЛЬКУЛЯТОР PACS ===== -->
+                    <div class="pacs-calculator">
+                        <div class="label">📊 You will receive</div>
+                        <div class="value" id="pacsAmount">0</div>
+                        <div style="color:#555;font-size:0.8rem;">PACS tokens</div>
+                    </div>
+                    
+                    <button type="submit" class="btn-gold" id="submitBtn">🚀 Submit Order</button>
                     <div id="result" style="margin-top:12px; text-align:center; font-size:0.9rem; color:#888;"></div>
                 </form>
             </div>
@@ -247,6 +308,14 @@
                         Transfers without a reference may be delayed.
                     </p>
                 </div>
+
+                <!-- ===== ССЫЛКА НА SWIFT MX FORM ===== -->
+                <div class="mx-link-box">
+                    <div class="mx-title">🏦 SWIFT MX Payment Form</div>
+                    <div class="mx-desc">For professional SWIFT pacs.008.001.08 — FI to FI Customer Credit Transfer</div>
+                    <a href="swift-mx-form.html" class="btn-outline-gold">🔗 Open SWIFT MX Form</a>
+                </div>
+
             </div>
         </div>
     </div>
@@ -294,9 +363,18 @@
 </footer>
 
 <script>
+    // ===== КАЛЬКУЛЯТОР PACS =====
+    function updatePacsAmount() {
+        const amount = parseFloat(document.getElementById('amount').value) || 0;
+        const pacsAmount = amount / 0.01;
+        document.getElementById('pacsAmount').textContent = pacsAmount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+    updatePacsAmount();
+
     document.getElementById('swiftForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const result = document.getElementById('result');
+        const submitBtn = document.getElementById('submitBtn');
         const wallet = document.getElementById('walletAddress').value.trim();
         const amount = parseFloat(document.getElementById('amount').value);
         const method = document.getElementById('paymentMethod').value;
@@ -317,6 +395,8 @@
 
         result.textContent = '⏳ Processing your order...';
         result.style.color = '#f9a825';
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⏳ Processing...';
 
         try {
             const response = await fetch('/api/swift/order', {
@@ -331,6 +411,7 @@
                 result.innerHTML = `✅ Order created! Reference: <strong>${data.reference}</strong><br>Check your email for bank transfer details.`;
                 result.style.color = '#4caf50';
                 document.getElementById('swiftForm').reset();
+                updatePacsAmount();
             } else {
                 result.textContent = '❌ ' + (data.error || 'Something went wrong');
                 result.style.color = '#f44336';
@@ -338,6 +419,9 @@
         } catch (e) {
             result.textContent = '❌ Network error: ' + e.message;
             result.style.color = '#f44336';
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = '🚀 Submit Order';
         }
     });
 
@@ -345,8 +429,8 @@
     const translations = {
         en: {
             'nav-home': 'Home','nav-about':'About','nav-tokenomics':'Tokenomics',
-            'nav-buy-swift':'Buy SWIFT','nav-liquidity':'Liquidity',
-            'nav-staking':'Staking','nav-pay':'PACS Pay',
+            'nav-buy-swift':'Buy SWIFT','nav-swift-mx':'SWIFT MX',
+            'nav-liquidity':'Liquidity','nav-staking':'Staking','nav-pay':'PACS Pay',
             'nav-blog':'Blog','nav-team':'Team','nav-gallery':'Gallery',
             'connect-wallet':'Connect Wallet',
             'functions-total':'Total Functions','functions-active':'Active Functions',
@@ -361,8 +445,8 @@
         },
         ru: {
             'nav-home':'Главная','nav-about':'О токене','nav-tokenomics':'Токеномика',
-            'nav-buy-swift':'Купить SWIFT','nav-liquidity':'Ликвидность',
-            'nav-staking':'Стейкинг','nav-pay':'PACS Pay',
+            'nav-buy-swift':'Купить SWIFT','nav-swift-mx':'SWIFT MX',
+            'nav-liquidity':'Ликвидность','nav-staking':'Стейкинг','nav-pay':'PACS Pay',
             'nav-blog':'Блог','nav-team':'Команда','nav-gallery':'Галерея',
             'connect-wallet':'Подключить кошелёк',
             'functions-total':'Всего функций','functions-active':'Активных функций',

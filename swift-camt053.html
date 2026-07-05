@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>camt.053 — Bank Statement</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .swift-form { max-width: 1000px; margin: 0 auto; padding: 20px 0; }
+        .swift-form .form-section {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .swift-form .form-section h3 {
+            color: #f9a825;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            padding-bottom: 10px;
+        }
+        .swift-form .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+        .swift-form .form-group { margin-bottom: 12px; }
+        .swift-form .form-group label {
+            color: #888;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        .swift-form .form-group .field-tag {
+            color: #f9a825;
+            font-family: monospace;
+            font-size: 0.65rem;
+            background: rgba(249,168,37,0.08);
+            padding: 1px 8px;
+            border-radius: 4px;
+            margin-left: 6px;
+        }
+        .swift-form .form-input {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .swift-form .form-input:focus {
+            outline: none;
+            border-color: #f9a825;
+            background: rgba(255,255,255,0.06);
+        }
+        .swift-form .form-input.code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+        .swift-form .form-select {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .swift-form .form-select:focus {
+            outline: none;
+            border-color: #f9a825;
+            background: rgba(255,255,255,0.06);
+        }
+        .swift-form .form-select option { background: #1a1a1a; }
+        .swift-form .form-hint { color: #555; font-size: 0.65rem; margin-top: 4px; }
+        .swift-form .xml-preview {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.65rem;
+            color: #888;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .btn-submit-swift {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f9a825, #e08e0b);
+            color: #0a0a0a;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+        .btn-submit-swift:hover { transform: scale(1.01); box-shadow: 0 8px 30px rgba(249,168,37,0.3); }
+        .btn-back {
+            display: inline-block;
+            padding: 10px 24px;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px;
+            color: #888;
+            text-decoration: none;
+            transition: 0.3s;
+            margin-bottom: 20px;
+        }
+        .btn-back:hover { border-color: #f9a825; color: #f9a825; }
+        .tag-badge {
+            background: rgba(33,150,243,0.1);
+            color: #2196f3;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            font-weight: 400;
+        }
+        .statement-balance {
+            background: rgba(249,168,37,0.05);
+            border: 1px solid rgba(249,168,37,0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 12px;
+            text-align: center;
+        }
+        .statement-balance .amount {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #f9a825;
+        }
+        .statement-balance .label { color: #888; font-size: 0.8rem; }
+        @media (max-width: 768px) {
+            .swift-form .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<header>
+    <div class="container header-inner">
+        <a href="index.html" class="logo">
+            <img src="https://raw.githubusercontent.com/goldtether/pacs/main/pacs_logo.png" alt="PACS">
+            <span>PACS</span>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="tokenomics.html">Tokenomics</a>
+            <a href="buy-swift.html">Buy SWIFT</a>
+            <a href="swift-dashboard.html" class="active">SWIFT MX</a>
+            <a href="liquidity.html">Liquidity</a>
+            <a href="staking.html">Staking</a>
+            <a href="pay.html">PACS Pay</a>
+            <button class="btn-connect" onclick="alert('🔗 Connect wallet — coming soon!')">Connect Wallet</button>
+            <div class="lang-switcher">
+                <button class="lang-btn" id="langToggle">🌐 <span id="currentLangLabel">EN</span></button>
+                <div class="lang-dropdown" id="langDropdown">
+                    <button data-lang="en" class="active">🇬🇧 English</button>
+                    <button data-lang="ru">🇷🇺 Русский</button>
+                    <button data-lang="es">🇪🇸 Español</button>
+                    <button data-lang="fr">🇫🇷 Français</button>
+                    <button data-lang="de">🇩🇪 Deutsch</button>
+                    <button data-lang="zh">🇨🇳 中文</button>
+                    <button data-lang="ja">🇯🇵 日本語</button>
+                    <button data-lang="ko">🇰🇷 한국어</button>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<section style="padding: 120px 0 40px;">
+    <div class="container">
+        <a href="swift-dashboard.html" class="btn-back">← Back to Dashboard</a>
+        <h1 class="section-title"><span class="text-gold">camt.053</span> Bank Statement</h1>
+        <p class="section-subtitle">Account Statement — Complete Transaction History</p>
+        <div style="text-align:center;color:#888;font-size:0.85rem;margin-top:-10px;">
+            <span class="tag-badge">ISO 20022</span> <span class="tag-badge">Statement</span> <span class="tag-badge">Account Report</span>
+        </div>
+    </div>
+</section>
+
+<section style="padding: 20px 0 60px;">
+    <div class="container">
+        <div class="swift-form">
+
+            <div class="form-section">
+                <h3>📋 Statement Request</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Account ID <span class="field-tag">&lt;AcctId&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="PL61109010140000071219812874" value="PL61109010140000071219812874" />
+                    </div>
+                    <div class="form-group">
+                        <label>Currency <span class="field-tag">&lt;Ccy&gt;</span></label>
+                        <select class="form-select">
+                            <option value="USD" selected>USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
+                            <option value="CHF">CHF</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>From Date <span class="field-tag">&lt;FrDt&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="date" class="form-input" value="2026-06-01" />
+                    </div>
+                    <div class="form-group">
+                        <label>To Date <span class="field-tag">&lt;ToDt&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="date" class="form-input" value="2026-06-28" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>📊 Account Balance</h3>
+                <div class="statement-balance">
+                    <div class="label">Opening Balance</div>
+                    <div class="amount">$125,430.50</div>
+                    <div style="color:#888;font-size:0.8rem;margin-top:4px;">as of 2026-06-01</div>
+                </div>
+                <div class="statement-balance" style="margin-top:12px;border-color:rgba(76,175,80,0.2);">
+                    <div class="label">Closing Balance</div>
+                    <div class="amount">$145,789.25</div>
+                    <div style="color:#4caf50;font-size:0.8rem;margin-top:4px;">↑ +$20,358.75 (16.2%)</div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>📄 Transactions (Sample)</h3>
+                <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:12px;font-size:0.8rem;color:#888;font-family:monospace;">
+                    <div style="display:grid;grid-template-columns:100px 100px 1fr 100px;gap:8px;border-bottom:1px solid rgba(255,255,255,0.04);padding-bottom:8px;color:#666;">
+                        <span>Date</span>
+                        <span>Type</span>
+                        <span>Description</span>
+                        <span style="text-align:right;">Amount</span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:100px 100px 1fr 100px;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.02);">
+                        <span>2026-06-28</span>
+                        <span style="color:#f9a825;">CREDIT</span>
+                        <span>PACS Purchase - Invoice 1/2025</span>
+                        <span style="text-align:right;color:#4caf50;">+$5,000.00</span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:100px 100px 1fr 100px;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.02);">
+                        <span>2026-06-25</span>
+                        <span style="color:#f44336;">DEBIT</span>
+                        <span>ATM Withdrawal - NYC Branch</span>
+                        <span style="text-align:right;color:#f44336;">-$400.00</span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:100px 100px 1fr 100px;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.02);">
+                        <span>2026-06-20</span>
+                        <span style="color:#f9a825;">CREDIT</span>
+                        <span>Salary Deposit - June</span>
+                        <span style="text-align:right;color:#4caf50;">+$15,000.00</span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:100px 100px 1fr 100px;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.02);">
+                        <span>2026-06-15</span>
+                        <span style="color:#f44336;">DEBIT</span>
+                        <span>Transfer to Supplier - Invoice #456</span>
+                        <span style="text-align:right;color:#f44336;">-$2,500.00</span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:100px 100px 1fr 100px;gap:8px;padding:6px 0;">
+                        <span>2026-06-10</span>
+                        <span style="color:#f9a825;">CREDIT</span>
+                        <span>Dividend Payment - Q2 2026</span>
+                        <span style="text-align:right;color:#4caf50;">+$3,250.75</span>
+                    </div>
+                    <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.04);color:#666;text-align:right;">
+                        Total Transactions: 5
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>📄 XML Preview</h3>
+                <div class="xml-preview">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.053.001.08"&gt;
+  &lt;BankToCstmrAcctRpt&gt;
+    &lt;GrpHdr&gt;
+      &lt;MsgId&gt;STM20260628001&lt;/MsgId&gt;
+      &lt;CreDtTm&gt;2026-06-28T12:00:00Z&lt;/CreDtTm&gt;
+    &lt;/GrpHdr&gt;
+    &lt;Rpt&gt;
+      &lt;Acct&gt;
+        &lt;Id&gt;&lt;IBAN&gt;PL61109010140000071219812874&lt;/IBAN&gt;&lt;/Id&gt;
+        &lt;Ccy&gt;USD&lt;/Ccy&gt;
+      &lt;/Acct&gt;
+      &lt;Bal&gt;
+        &lt;Tp&gt;&lt;CdOrPrtry&gt;&lt;Cd&gt;OPBD&lt;/Cd&gt;&lt;/CdOrPrtry&gt;&lt;/Tp&gt;
+        &lt;Amt Ccy="USD"&gt;125430.50&lt;/Amt&gt;
+        &lt;Dt&gt;2026-06-01&lt;/Dt&gt;
+      &lt;/Bal&gt;
+      &lt;Bal&gt;
+        &lt;Tp&gt;&lt;CdOrPrtry&gt;&lt;Cd&gt;CLBD&lt;/Cd&gt;&lt;/CdOrPrtry&gt;&lt;/Tp&gt;
+        &lt;Amt Ccy="USD"&gt;145789.25&lt;/Amt&gt;
+        &lt;Dt&gt;2026-06-28&lt;/Dt&gt;
+      &lt;/Bal&gt;
+      &lt;Ntry&gt;
+        &lt;NtryRef&gt;1&lt;/NtryRef&gt;
+        &lt;Amt Ccy="USD"&gt;5000.00&lt;/Amt&gt;
+        &lt;CdtDbtInd&gt;CRDT&lt;/CdtDbtInd&gt;
+        &lt;BookgDt&gt;2026-06-28&lt;/BookgDt&gt;
+        &lt;NtryDtls&gt;
+          &lt;TxDtls&gt;
+            &lt;RmtInf&gt;
+              &lt;Ustrd&gt;PACS Purchase - Invoice 1/2025&lt;/Ustrd&gt;
+            &lt;/RmtInf&gt;
+          &lt;/TxDtls&gt;
+        &lt;/NtryDtls&gt;
+      &lt;/Ntry&gt;
+    &lt;/Rpt&gt;
+  &lt;/BankToCstmrAcctRpt&gt;
+&lt;/Document&gt;
+                </div>
+            </div>
+
+            <button class="btn-submit-swift" onclick="submitStatement()">📄 Request Statement</button>
+            <div id="result" style="text-align:center;margin-top:12px;font-size:0.9rem;color:#888;"></div>
+
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="socials">
+            <a href="#">🐦 Twitter</a>
+            <a href="#">💬 Telegram</a>
+            <a href="#">📊 GeckoTerminal</a>
+            <a href="#">📈 CoinGecko</a>
+        </div>
+        <p style="margin-top:20px; color:#444;">© 2026 PACS Protocol. Built on Solana.</p>
+    </div>
+</footer>
+
+<script>
+    function submitStatement() {
+        const result = document.getElementById('result');
+        result.textContent = '⏳ Generating bank statement...';
+        result.style.color = '#f9a825';
+        setTimeout(() => {
+            result.innerHTML = '✅ Statement Generated!<br><span style="font-size:0.8rem;color:#888;">Reference: <span style="color:#f9a825;">STM20260628001</span><br>Period: <span style="color:#f9a825;">2026-06-01 → 2026-06-28</span></span>';
+            result.style.color = '#4caf50';
+        }, 2000);
+    }
+
+    // Language switcher
+    const translations = {
+        en: { 'nav-home': 'Home','nav-about':'About','nav-tokenomics':'Tokenomics','nav-buy-swift':'Buy SWIFT','nav-swift':'SWIFT MX','nav-liquidity':'Liquidity','nav-staking':'Staking','nav-pay':'PACS Pay','connect-wallet':'Connect Wallet' },
+        ru: { 'nav-home':'Главная','nav-about':'О токене','nav-tokenomics':'Токеномика','nav-buy-swift':'Купить SWIFT','nav-swift':'SWIFT MX','nav-liquidity':'Ликвидность','nav-staking':'Стейкинг','nav-pay':'PACS Pay','connect-wallet':'Подключить кошелёк' }
+    };
+
+    let currentLang = localStorage.getItem('pacsLang') || 'en';
+    function applyLanguage(lang) {
+        if (!translations[lang]) return;
+        const t = translations[lang];
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (t[key]) el.textContent = t[key];
+        });
+        document.getElementById('currentLangLabel').textContent = lang.toUpperCase();
+        localStorage.setItem('pacsLang', lang);
+    }
+    document.getElementById('langToggle').addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.getElementById('langDropdown').classList.toggle('show');
+    });
+    document.addEventListener('click', () => {
+        document.getElementById('langDropdown').classList.remove('show');
+    });
+    document.querySelectorAll('.lang-dropdown button').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            applyLanguage(btn.dataset.lang);
+            document.getElementById('langDropdown').classList.remove('show');
+        });
+    });
+    applyLanguage(currentLang);
+</script>
+
+</body>
+</html>

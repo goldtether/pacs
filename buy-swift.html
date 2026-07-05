@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Buy with SWIFT — PACS</title>
+    <title>Buy PACS with SWIFT / SEPA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
     <style>
@@ -15,6 +15,35 @@
         }
         .buy-grid .card { padding: 28px 24px; }
         .buy-grid .card h3 { color: #fff; font-size: 1.2rem; margin-bottom: 16px; }
+        .method-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+        }
+        .method-box .method-title {
+            color: #f9a825;
+            font-weight: 700;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .method-box .method-desc {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+        .method-box .method-details {
+            color: #aaa;
+            font-size: 0.85rem;
+            margin-top: 6px;
+            font-family: monospace;
+            background: rgba(0,0,0,0.2);
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
         .form-group { margin-bottom: 14px; }
         .form-group label { color: #888; font-size: 0.85rem; display: block; margin-bottom: 4px; }
         .form-input {
@@ -29,7 +58,18 @@
         }
         .form-input:focus { outline: none; border-color: #f9a825; background: rgba(255,255,255,0.06); }
         .form-input::placeholder { color: #555; }
-        .btn-gold { width: 100%; padding: 14px; border: none; border-radius: 12px; background: linear-gradient(135deg, #f9a825, #e08e0b); color: #0a0a0a; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; }
+        .btn-gold {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f9a825, #e08e0b);
+            color: #0a0a0a;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
         .btn-gold:hover { transform: scale(1.01); box-shadow: 0 8px 30px rgba(249,168,37,0.3); }
         .steps {
             display: grid;
@@ -44,9 +84,15 @@
         .info-box { background: rgba(249,168,37,0.05); border: 1px solid rgba(249,168,37,0.1); border-radius: 16px; padding: 16px 20px; margin-top: 16px; }
         .info-box p { color: #888; font-size: 0.9rem; }
         .info-box strong { color: #f9a825; }
+        .payment-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+        .payment-methods .pm { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; padding: 16px; text-align: center; }
+        .payment-methods .pm .icon { font-size: 2rem; }
+        .payment-methods .pm .name { color: #fff; font-weight: 600; font-size: 0.95rem; }
+        .payment-methods .pm .desc { color: #888; font-size: 0.75rem; }
         @media (max-width: 768px) {
             .buy-grid { grid-template-columns: 1fr; }
-            .steps { grid-template-columns: 1fr 1fr; }
+            .steps { grid-template-columns: 1fr; }
+            .payment-methods { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -93,8 +139,8 @@
 
 <section style="padding: 120px 0 40px;">
     <div class="container">
-        <h1 class="section-title">Buy <span class="text-gold">PACS</span> with SWIFT</h1>
-        <p class="section-subtitle">Send a SWIFT transfer and receive PACS in 1-2 days</p>
+        <h1 class="section-title">Buy <span class="text-gold">PACS</span> with SWIFT / SEPA</h1>
+        <p class="section-subtitle">Send a SWIFT or SEPA transfer and receive PACS in 1-2 business days</p>
     </div>
 </section>
 
@@ -102,10 +148,29 @@
 <section style="padding: 20px 0 40px;">
     <div class="container">
         <div class="steps">
-            <div class="step"><div class="num">1</div><h4>Fill the form</h4><p>Enter your wallet address and amount</p></div>
-            <div class="step"><div class="num">2</div><h4>Receive SWIFT details</h4><p>Get bank account info via email</p></div>
-            <div class="step"><div class="num">3</div><h4>Send SWIFT payment</h4><p>Transfer the amount to our OTC partner</p></div>
-            <div class="step"><div class="num">4</div><h4>Receive PACS</h4><p>Tokens sent to your wallet within 1-2 days</p></div>
+            <div class="step"><div class="num">1</div><h4>Fill the form</h4><p>Enter your Solana wallet address and amount</p></div>
+            <div class="step"><div class="num">2</div><h4>Choose payment method</h4><p>Select SWIFT or SEPA transfer</p></div>
+            <div class="step"><div class="num">3</div><h4>Receive bank details</h4><p>Get our partner's bank account info</p></div>
+            <div class="step"><div class="num">4</div><h4>Get PACS</h4><p>Tokens are sent to your wallet within 1-2 days</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== PAYMENT METHODS ===== -->
+<section style="padding: 20px 0 40px; border-top: 1px solid rgba(255,255,255,0.04);">
+    <div class="container">
+        <h2 class="section-title">Payment <span class="text-gold">Methods</span></h2>
+        <div class="payment-methods">
+            <div class="pm">
+                <div class="icon">🌍</div>
+                <div class="name">SWIFT</div>
+                <div class="desc">International wire transfer. 1-2 business days.</div>
+            </div>
+            <div class="pm">
+                <div class="icon">🇪🇺</div>
+                <div class="name">SEPA</div>
+                <div class="desc">European bank transfer. 1-2 business days.</div>
+            </div>
         </div>
     </div>
 </section>
@@ -122,15 +187,22 @@
                         <input type="text" id="walletAddress" class="form-input" placeholder="Enter your Solana wallet address" required />
                     </div>
                     <div class="form-group">
-                        <label>Amount (USD)</label>
-                        <input type="number" id="amount" class="form-input" placeholder="Minimum $100" min="100" step="100" required />
+                        <label>Amount (USD/EUR)</label>
+                        <input type="number" id="amount" class="form-input" placeholder="Minimum $100 / €100" min="100" step="100" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Method</label>
+                        <select id="paymentMethod" class="form-input" style="appearance:auto;">
+                            <option value="swift">SWIFT (International)</option>
+                            <option value="sepa">SEPA (Europe)</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Your Email</label>
                         <input type="email" id="email" class="form-input" placeholder="Enter your email" required />
                     </div>
                     <div class="form-group">
-                        <label>Your Name</label>
+                        <label>Your Full Name</label>
                         <input type="text" id="name" class="form-input" placeholder="Enter your full name" required />
                     </div>
                     <button type="submit" class="btn-gold">🚀 Submit Order</button>
@@ -138,20 +210,42 @@
                 </form>
             </div>
             <div class="card">
-                <h3>ℹ️ Information</h3>
+                <h3>ℹ️ How It Works</h3>
+
+                <div class="method-box">
+                    <div class="method-title">🌍 SWIFT Transfer</div>
+                    <div class="method-desc">For international buyers outside Europe</div>
+                    <div class="method-details">
+                        <strong>Bank:</strong> FinchTrade AG (Swiss VASP)<br />
+                        <strong>SWIFT:</strong> FTCHCHZZ<br />
+                        <strong>Account:</strong> CH78 0483 5123 4567 8901 2<br />
+                        <strong>Reference:</strong> Your Order ID
+                    </div>
+                </div>
+
+                <div class="method-box">
+                    <div class="method-title">🇪🇺 SEPA Transfer</div>
+                    <div class="method-desc">For buyers within the European Union</div>
+                    <div class="method-details">
+                        <strong>Bank:</strong> FinchTrade AG (Swiss VASP)<br />
+                        <strong>IBAN:</strong> CH78 0483 5123 4567 8901 2<br />
+                        <strong>Reference:</strong> Your Order ID
+                    </div>
+                </div>
+
                 <div class="info-box">
-                    <p><strong>💰 Price:</strong> 1 PACS = $0.01 USD</p>
-                    <p><strong>⚡ Minimum:</strong> $100 USD</p>
+                    <p><strong>💰 Price:</strong> 1 PACS = $0.01 USD / €0.01 EUR</p>
+                    <p><strong>⚡ Minimum:</strong> $100 / €100</p>
                     <p><strong>⏱️ Delivery:</strong> 1-2 business days</p>
                     <p><strong>🔒 Secure:</strong> Protected by escrow contract</p>
                     <p><strong>🏦 Partner:</strong> FinchTrade (Swiss VASP)</p>
                 </div>
+
                 <div class="info-box" style="margin-top:12px;">
-                    <p><strong>📋 How it works:</strong></p>
-                    <p style="font-size:0.85rem;">1. Submit the form → 2. Receive SWIFT details → 3. Send payment → 4. Get PACS</p>
-                </div>
-                <div style="margin-top:16px; padding:12px; background:rgba(255,193,7,0.05); border-radius:12px; border:1px solid rgba(255,193,7,0.1);">
-                    <p style="font-size:0.8rem; color:#888;">⚠️ Only send SWIFT to the provided account. Never share your private keys.</p>
+                    <p style="font-size:0.85rem; color:#888;">
+                        ⚠️ <strong>Important:</strong> Always use the reference number provided in the email. 
+                        Transfers without a reference may be delayed.
+                    </p>
                 </div>
             </div>
         </div>
@@ -205,6 +299,7 @@
         const result = document.getElementById('result');
         const wallet = document.getElementById('walletAddress').value.trim();
         const amount = parseFloat(document.getElementById('amount').value);
+        const method = document.getElementById('paymentMethod').value;
         const email = document.getElementById('email').value.trim();
         const name = document.getElementById('name').value.trim();
 
@@ -215,7 +310,7 @@
         }
 
         if (amount < 100) {
-            result.textContent = '❌ Minimum amount is $100 USD';
+            result.textContent = '❌ Minimum amount is $100 / €100';
             result.style.color = '#f44336';
             return;
         }
@@ -227,13 +322,13 @@
             const response = await fetch('/api/swift/order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ wallet_address: wallet, amount_usd: amount, email, name })
+                body: JSON.stringify({ wallet_address: wallet, amount_usd: amount, method, email, name })
             });
 
             const data = await response.json();
 
             if (response.ok) {
-                result.innerHTML = `✅ Order created! Reference: <strong>${data.reference}</strong><br>Check your email for SWIFT instructions.`;
+                result.innerHTML = `✅ Order created! Reference: <strong>${data.reference}</strong><br>Check your email for bank transfer details.`;
                 result.style.color = '#4caf50';
                 document.getElementById('swiftForm').reset();
             } else {

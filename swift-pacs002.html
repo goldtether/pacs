@@ -7,7 +7,123 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
     <style>
-        .swift-form { max-width: 900px; margin: 0 auto; padding: 20px 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0a0a0a; color: #fff; font-family: 'Inter', sans-serif; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .glow-1 { width: 600px; height: 600px; background: rgba(249,168,37,0.04); top: -200px; right: -200px; }
+        .glow-2 { width: 500px; height: 500px; background: rgba(249,168,37,0.03); bottom: -200px; left: -200px; }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10,10,10,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            padding: 12px 0;
+        }
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 800;
+            font-size: 1.3rem;
+        }
+        .logo img { height: 32px; width: auto; }
+        .logo span { color: #f9a825; }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+        .nav-links a:hover { color: #f9a825; }
+        .nav-links a.active { color: #f9a825; }
+        .btn-connect {
+            background: linear-gradient(135deg, #f9a825, #e08e0b);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            color: #0a0a0a;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-connect:hover { transform: scale(1.05); }
+        .lang-switcher { position: relative; }
+        .lang-btn {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 6px 12px;
+            border-radius: 8px;
+            color: #888;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .lang-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 8px;
+            display: none;
+            min-width: 140px;
+            z-index: 200;
+        }
+        .lang-dropdown.show { display: block; }
+        .lang-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 6px 12px;
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.8rem;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+        .lang-dropdown button:hover { background: rgba(255,255,255,0.04); color: #fff; }
+        .lang-dropdown button.active { color: #f9a825; }
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        .text-gold { color: #f9a825; }
+        .swift-form { max-width: 1000px; margin: 0 auto; padding: 20px 0; }
         .swift-form .form-section {
             background: rgba(255,255,255,0.02);
             border: 1px solid rgba(255,255,255,0.04);
@@ -98,6 +214,21 @@
         .status-badge.rejected { background: rgba(244,67,54,0.15); color: #f44336; }
         .status-badge.pending { background: rgba(249,168,37,0.15); color: #f9a825; }
         .status-badge.settled { background: rgba(33,150,243,0.15); color: #2196f3; }
+        .status-badge.cancelled { background: rgba(244,67,54,0.1); color: #f44336; }
+        .swift-form .xml-preview {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.65rem;
+            color: #888;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 400px;
+            overflow-y: auto;
+        }
         .btn-submit-swift {
             width: 100%;
             padding: 16px;
@@ -131,7 +262,19 @@
             font-size: 0.6rem;
             font-weight: 400;
         }
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 40px;
+            text-align: center;
+        }
+        .socials { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
+        .socials a { color: #666; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .socials a:hover { color: #f9a825; }
         @media (max-width: 768px) {
+            .nav-links { gap: 12px; flex-wrap: wrap; }
+            .nav-links a { font-size: 0.75rem; }
+            .section-title { font-size: 2rem; }
             .swift-form .form-row { grid-template-columns: 1fr; }
         }
     </style>
@@ -216,7 +359,6 @@
                             <option value="CANC">CANC — Cancelled</option>
                             <option value="PART">PART — Partially Settled</option>
                         </select>
-                        <div class="form-hint">Current status of the payment</div>
                     </div>
                     <div class="form-group">
                         <label>Status Reason <span class="field-tag">&lt;StsRsn&gt;</span></label>
@@ -271,7 +413,7 @@
 
             <div class="form-section">
                 <h3>📄 XML Preview</h3>
-                <div class="xml-preview" style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.04);border-radius:12px;padding:16px;font-family:'Courier New',monospace;font-size:0.65rem;color:#888;white-space:pre-wrap;max-height:300px;overflow-y:auto;">
+                <div class="xml-preview">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.002.001.10"&gt;
   &lt;FIToFIPmtStsRpt&gt;
@@ -284,14 +426,10 @@
       &lt;OrgnlUETR&gt;a85f1801-130b-4f7d-ac7b-4de982c16674&lt;/OrgnlUETR&gt;
       &lt;TxSts&gt;RJCT&lt;/TxSts&gt;
       &lt;StsRsnInf&gt;
-        &lt;Rsn&gt;
-          &lt;Prtry&gt;AC01&lt;/Prtry&gt;
-        &lt;/Rsn&gt;
+        &lt;Rsn&gt;&lt;Prtry&gt;AC01&lt;/Prtry&gt;&lt;/Rsn&gt;
         &lt;AddtlInf&gt;Incorrect beneficiary account number&lt;/AddtlInf&gt;
       &lt;/StsRsnInf&gt;
-      &lt;TxDtls&gt;
-        &lt;Amt Ccy="USD"&gt;5000.00&lt;/Amt&gt;
-      &lt;/TxDtls&gt;
+      &lt;TxDtls&gt;&lt;Amt Ccy="USD"&gt;5000.00&lt;/Amt&gt;&lt;/TxDtls&gt;
     &lt;/TxInfAndSts&gt;
   &lt;/FIToFIPmtStsRpt&gt;
 &lt;/Document&gt;
@@ -310,7 +448,7 @@
         <div class="socials">
             <a href="#">🐦 Twitter</a>
             <a href="#">💬 Telegram</a>
-            <a href="#">📊 GeckoTerminal</a>
+            <a href="https://www.geckoterminal.com/solana/pools/BGix6rhfC9mGVpdKrhYA5VqLABQ4kFpLkBmygRxfAB4g" target="_blank">📊 GeckoTerminal</a>
             <a href="#">📈 CoinGecko</a>
         </div>
         <p style="margin-top:20px; color:#444;">© 2026 PACS Protocol. Built on Solana.</p>
@@ -334,7 +472,7 @@
             'RJCT': 'rejected',
             'PDNG': 'pending',
             'SETT': 'settled',
-            'CANC': 'rejected',
+            'CANC': 'cancelled',
             'PART': 'pending'
         };
         display.textContent = labels[status] || '● UNKNOWN';
@@ -352,7 +490,6 @@
         }, 1500);
     }
 
-    // Language switcher
     const translations = {
         en: { 'nav-home': 'Home','nav-about':'About','nav-tokenomics':'Tokenomics','nav-buy-swift':'Buy SWIFT','nav-swift':'SWIFT MX','nav-liquidity':'Liquidity','nav-staking':'Staking','nav-pay':'PACS Pay','connect-wallet':'Connect Wallet' },
         ru: { 'nav-home':'Главная','nav-about':'О токене','nav-tokenomics':'Токеномика','nav-buy-swift':'Купить SWIFT','nav-swift':'SWIFT MX','nav-liquidity':'Ликвидность','nav-staking':'Стейкинг','nav-pay':'PACS Pay','connect-wallet':'Подключить кошелёк' }

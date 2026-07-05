@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pacs.002 — Payment Status Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .swift-form { max-width: 900px; margin: 0 auto; padding: 20px 0; }
+        .swift-form .form-section {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .swift-form .form-section h3 {
+            color: #f9a825;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            padding-bottom: 10px;
+        }
+        .swift-form .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+        .swift-form .form-group { margin-bottom: 12px; }
+        .swift-form .form-group label {
+            color: #888;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        .swift-form .form-group .field-tag {
+            color: #f9a825;
+            font-family: monospace;
+            font-size: 0.65rem;
+            background: rgba(249,168,37,0.08);
+            padding: 1px 8px;
+            border-radius: 4px;
+            margin-left: 6px;
+        }
+        .swift-form .form-input {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .swift-form .form-input:focus {
+            outline: none;
+            border-color: #f9a825;
+            background: rgba(255,255,255,0.06);
+        }
+        .swift-form .form-input.code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+        .swift-form .form-select {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .swift-form .form-select:focus {
+            outline: none;
+            border-color: #f9a825;
+            background: rgba(255,255,255,0.06);
+        }
+        .swift-form .form-select option { background: #1a1a1a; }
+        .swift-form .form-hint { color: #555; font-size: 0.65rem; margin-top: 4px; }
+        .swift-form .mandatory { color: #f44336; font-size: 0.6rem; }
+        .swift-form .status-badge {
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .status-badge.accepted { background: rgba(76,175,80,0.15); color: #4caf50; }
+        .status-badge.rejected { background: rgba(244,67,54,0.15); color: #f44336; }
+        .status-badge.pending { background: rgba(249,168,37,0.15); color: #f9a825; }
+        .status-badge.settled { background: rgba(33,150,243,0.15); color: #2196f3; }
+        .btn-submit-swift {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f9a825, #e08e0b);
+            color: #0a0a0a;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+        .btn-submit-swift:hover { transform: scale(1.01); box-shadow: 0 8px 30px rgba(249,168,37,0.3); }
+        .btn-back {
+            display: inline-block;
+            padding: 10px 24px;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px;
+            color: #888;
+            text-decoration: none;
+            transition: 0.3s;
+            margin-bottom: 20px;
+        }
+        .btn-back:hover { border-color: #f9a825; color: #f9a825; }
+        .tag-badge {
+            background: rgba(33,150,243,0.1);
+            color: #2196f3;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            font-weight: 400;
+        }
+        @media (max-width: 768px) {
+            .swift-form .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<header>
+    <div class="container header-inner">
+        <a href="index.html" class="logo">
+            <img src="https://raw.githubusercontent.com/goldtether/pacs/main/pacs_logo.png" alt="PACS">
+            <span>PACS</span>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="tokenomics.html">Tokenomics</a>
+            <a href="buy-swift.html">Buy SWIFT</a>
+            <a href="swift-dashboard.html" class="active">SWIFT MX</a>
+            <a href="liquidity.html">Liquidity</a>
+            <a href="staking.html">Staking</a>
+            <a href="pay.html">PACS Pay</a>
+            <button class="btn-connect" onclick="alert('🔗 Connect wallet — coming soon!')">Connect Wallet</button>
+            <div class="lang-switcher">
+                <button class="lang-btn" id="langToggle">🌐 <span id="currentLangLabel">EN</span></button>
+                <div class="lang-dropdown" id="langDropdown">
+                    <button data-lang="en" class="active">🇬🇧 English</button>
+                    <button data-lang="ru">🇷🇺 Русский</button>
+                    <button data-lang="es">🇪🇸 Español</button>
+                    <button data-lang="fr">🇫🇷 Français</button>
+                    <button data-lang="de">🇩🇪 Deutsch</button>
+                    <button data-lang="zh">🇨🇳 中文</button>
+                    <button data-lang="ja">🇯🇵 日本語</button>
+                    <button data-lang="ko">🇰🇷 한국어</button>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<section style="padding: 120px 0 40px;">
+    <div class="container">
+        <a href="swift-dashboard.html" class="btn-back">← Back to Dashboard</a>
+        <h1 class="section-title"><span class="text-gold">pacs.002</span> Payment Status Report</h1>
+        <p class="section-subtitle">Real-time payment status — Accepted, Rejected, Pending, Settled</p>
+        <div style="text-align:center;color:#888;font-size:0.85rem;margin-top:-10px;">
+            <span class="tag-badge">ISO 20022</span> <span class="tag-badge">Status</span> <span class="tag-badge">Tracking</span>
+        </div>
+    </div>
+</section>
+
+<section style="padding: 20px 0 60px;">
+    <div class="container">
+        <div class="swift-form">
+
+            <div class="form-section">
+                <h3>📋 Transaction Reference</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Original Message ID <span class="field-tag">&lt;OrgnlMsgId&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="TO20260628001" value="TO20260628001" />
+                    </div>
+                    <div class="form-group">
+                        <label>Original UETR <span class="field-tag">&lt;OrgnlUETR&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="a85f1801-130b-4f7d-ac7b-4de982c16674" value="a85f1801-130b-4f7d-ac7b-4de982c16674" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>📊 Payment Status</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Status <span class="field-tag">&lt;Sts&gt;</span> <span class="mandatory">*</span></label>
+                        <select class="form-select" id="statusSelect" onchange="updateStatus()">
+                            <option value="ACCP">ACCP — Accepted</option>
+                            <option value="RJCT" selected>RJCT — Rejected</option>
+                            <option value="PDNG">PDNG — Pending</option>
+                            <option value="SETT">SETT — Settled</option>
+                            <option value="CANC">CANC — Cancelled</option>
+                            <option value="PART">PART — Partially Settled</option>
+                        </select>
+                        <div class="form-hint">Current status of the payment</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Status Reason <span class="field-tag">&lt;StsRsn&gt;</span></label>
+                        <select class="form-select">
+                            <option value="">— Select reason —</option>
+                            <option value="AC01">AC01 — Incorrect account number</option>
+                            <option value="AC04">AC04 — Closed account</option>
+                            <option value="AC06">AC06 — Blocked account</option>
+                            <option value="AM01">AM01 — Amount exceeds limit</option>
+                            <option value="AM04">AM04 — Insufficient funds</option>
+                            <option value="BE01">BE01 — Invalid beneficiary</option>
+                            <option value="BE04">BE04 — Missing beneficiary</option>
+                            <option value="CUST">CUST — Customer request</option>
+                            <option value="DUPL">DUPL — Duplicate payment</option>
+                            <option value="NARR">NARR — Narrative description</option>
+                            <option value="SETT">SETT — Settlement completed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top:8px;">
+                    <label>Status Reason Text <span class="field-tag">&lt;StsRsnInf/Txt&gt;</span></label>
+                    <input type="text" class="form-input" placeholder="Additional status information" value="Incorrect beneficiary account number" />
+                </div>
+                <div style="margin-top:12px; text-align:center;">
+                    <span id="statusDisplay" class="status-badge rejected">● REJECTED</span>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>💰 Transaction Details</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Amount <span class="field-tag">&lt;Amt&gt;</span></label>
+                        <input type="text" class="form-input" value="5000.00" readonly style="color:#f9a825;" />
+                    </div>
+                    <div class="form-group">
+                        <label>Currency <span class="field-tag">&lt;Ccy&gt;</span></label>
+                        <input type="text" class="form-input" value="USD" readonly style="color:#f9a825;" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Settlement Date <span class="field-tag">&lt;SttlmDt&gt;</span></label>
+                        <input type="text" class="form-input" value="2026-06-30" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Charge Bearer <span class="field-tag">&lt;ChrgBr&gt;</span></label>
+                        <input type="text" class="form-input" value="SHAR" readonly />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>📄 XML Preview</h3>
+                <div class="xml-preview" style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.04);border-radius:12px;padding:16px;font-family:'Courier New',monospace;font-size:0.65rem;color:#888;white-space:pre-wrap;max-height:300px;overflow-y:auto;">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.002.001.10"&gt;
+  &lt;FIToFIPmtStsRpt&gt;
+    &lt;GrpHdr&gt;
+      &lt;MsgId&gt;STAT20260628001&lt;/MsgId&gt;
+      &lt;CreDtTm&gt;2026-06-28T10:35:00Z&lt;/CreDtTm&gt;
+    &lt;/GrpHdr&gt;
+    &lt;TxInfAndSts&gt;
+      &lt;OrgnlTxId&gt;TO20260628001&lt;/OrgnlTxId&gt;
+      &lt;OrgnlUETR&gt;a85f1801-130b-4f7d-ac7b-4de982c16674&lt;/OrgnlUETR&gt;
+      &lt;TxSts&gt;RJCT&lt;/TxSts&gt;
+      &lt;StsRsnInf&gt;
+        &lt;Rsn&gt;
+          &lt;Prtry&gt;AC01&lt;/Prtry&gt;
+        &lt;/Rsn&gt;
+        &lt;AddtlInf&gt;Incorrect beneficiary account number&lt;/AddtlInf&gt;
+      &lt;/StsRsnInf&gt;
+      &lt;TxDtls&gt;
+        &lt;Amt Ccy="USD"&gt;5000.00&lt;/Amt&gt;
+      &lt;/TxDtls&gt;
+    &lt;/TxInfAndSts&gt;
+  &lt;/FIToFIPmtStsRpt&gt;
+&lt;/Document&gt;
+                </div>
+            </div>
+
+            <button class="btn-submit-swift" onclick="submitStatus()">🚀 Submit Status Report</button>
+            <div id="result" style="text-align:center;margin-top:12px;font-size:0.9rem;color:#888;"></div>
+
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="socials">
+            <a href="#">🐦 Twitter</a>
+            <a href="#">💬 Telegram</a>
+            <a href="#">📊 GeckoTerminal</a>
+            <a href="#">📈 CoinGecko</a>
+        </div>
+        <p style="margin-top:20px; color:#444;">© 2026 PACS Protocol. Built on Solana.</p>
+    </div>
+</footer>
+
+<script>
+    function updateStatus() {
+        const status = document.getElementById('statusSelect').value;
+        const display = document.getElementById('statusDisplay');
+        const labels = {
+            'ACCP': '● ACCEPTED',
+            'RJCT': '● REJECTED',
+            'PDNG': '● PENDING',
+            'SETT': '● SETTLED',
+            'CANC': '● CANCELLED',
+            'PART': '● PARTIALLY SETTLED'
+        };
+        const classes = {
+            'ACCP': 'accepted',
+            'RJCT': 'rejected',
+            'PDNG': 'pending',
+            'SETT': 'settled',
+            'CANC': 'rejected',
+            'PART': 'pending'
+        };
+        display.textContent = labels[status] || '● UNKNOWN';
+        display.className = 'status-badge ' + (classes[status] || 'pending');
+    }
+    updateStatus();
+
+    function submitStatus() {
+        const result = document.getElementById('result');
+        result.textContent = '⏳ Submitting status report...';
+        result.style.color = '#f9a825';
+        setTimeout(() => {
+            result.innerHTML = '✅ Status Report Submitted!<br><span style="font-size:0.8rem;color:#888;">Transaction: <span style="color:#f9a825;">TO20260628001</span></span>';
+            result.style.color = '#4caf50';
+        }, 1500);
+    }
+
+    // Language switcher
+    const translations = {
+        en: { 'nav-home': 'Home','nav-about':'About','nav-tokenomics':'Tokenomics','nav-buy-swift':'Buy SWIFT','nav-swift':'SWIFT MX','nav-liquidity':'Liquidity','nav-staking':'Staking','nav-pay':'PACS Pay','connect-wallet':'Connect Wallet' },
+        ru: { 'nav-home':'Главная','nav-about':'О токене','nav-tokenomics':'Токеномика','nav-buy-swift':'Купить SWIFT','nav-swift':'SWIFT MX','nav-liquidity':'Ликвидность','nav-staking':'Стейкинг','nav-pay':'PACS Pay','connect-wallet':'Подключить кошелёк' }
+    };
+
+    let currentLang = localStorage.getItem('pacsLang') || 'en';
+    function applyLanguage(lang) {
+        if (!translations[lang]) return;
+        const t = translations[lang];
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (t[key]) el.textContent = t[key];
+        });
+        document.getElementById('currentLangLabel').textContent = lang.toUpperCase();
+        localStorage.setItem('pacsLang', lang);
+    }
+    document.getElementById('langToggle').addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.getElementById('langDropdown').classList.toggle('show');
+    });
+    document.addEventListener('click', () => {
+        document.getElementById('langDropdown').classList.remove('show');
+    });
+    document.querySelectorAll('.lang-dropdown button').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            applyLanguage(btn.dataset.lang);
+            document.getElementById('langDropdown').classList.remove('show');
+        });
+    });
+    applyLanguage(currentLang);
+</script>
+
+</body>
+</html>

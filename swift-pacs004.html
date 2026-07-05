@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pacs.004 — Payment Return</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .swift-form { max-width: 1000px; margin: 0 auto; padding: 20px 0; }
+        .swift-form .form-section {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .swift-form .form-section h3 {
+            color: #f9a825;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            padding-bottom: 10px;
+        }
+        .swift-form .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+        .swift-form .form-group { margin-bottom: 12px; }
+        .swift-form .form-group label {
+            color: #888;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        .swift-form .form-group .field-tag {
+            color: #f9a825;
+            font-family: monospace;
+            font-size: 0.65rem;
+            background: rgba(249,168,37,0.08);
+            padding: 1px 8px;
+            border-radius: 4px;
+            margin-left: 6px;
+        }
+        .swift-form .form-input {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .swift-form .form-input:focus {
+            outline: none;
+            border-color: #f9a825;
+            background: rgba(255,255,255,0.06);
+        }
+        .swift-form .form-input.code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+        .swift-form .form-select {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .swift-form .form-select:focus {
+            outline: none;
+            border-color: #f9a825;
+            background: rgba(255,255,255,0.06);
+        }
+        .swift-form .form-select option { background: #1a1a1a; }
+        .swift-form .form-hint { color: #555; font-size: 0.65rem; margin-top: 4px; }
+        .swift-form .mandatory { color: #f44336; font-size: 0.6rem; }
+        .swift-form .optional { color: #666; font-size: 0.6rem; }
+        .swift-form .xml-preview {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.65rem;
+            color: #888;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .btn-submit-swift {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f9a825, #e08e0b);
+            color: #0a0a0a;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+        .btn-submit-swift:hover { transform: scale(1.01); box-shadow: 0 8px 30px rgba(249,168,37,0.3); }
+        .btn-back {
+            display: inline-block;
+            padding: 10px 24px;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px;
+            color: #888;
+            text-decoration: none;
+            transition: 0.3s;
+            margin-bottom: 20px;
+        }
+        .btn-back:hover { border-color: #f9a825; color: #f9a825; }
+        .tag-badge {
+            background: rgba(244,67,54,0.1);
+            color: #f44336;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            font-weight: 400;
+        }
+        .return-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            background: rgba(249,168,37,0.08);
+            color: #f9a825;
+        }
+        @media (max-width: 768px) {
+            .swift-form .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<header>
+    <div class="container header-inner">
+        <a href="index.html" class="logo">
+            <img src="https://raw.githubusercontent.com/goldtether/pacs/main/pacs_logo.png" alt="PACS">
+            <span>PACS</span>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="tokenomics.html">Tokenomics</a>
+            <a href="buy-swift.html">Buy SWIFT</a>
+            <a href="swift-dashboard.html" class="active">SWIFT MX</a>
+            <a href="liquidity.html">Liquidity</a>
+            <a href="staking.html">Staking</a>
+            <a href="pay.html">PACS Pay</a>
+            <button class="btn-connect" onclick="alert('🔗 Connect wallet — coming soon!')">Connect Wallet</button>
+            <div class="lang-switcher">
+                <button class="lang-btn" id="langToggle">🌐 <span id="currentLangLabel">EN</span></button>
+                <div class="lang-dropdown" id="langDropdown">
+                    <button data-lang="en" class="active">🇬🇧 English</button>
+                    <button data-lang="ru">🇷🇺 Русский</button>
+                    <button data-lang="es">🇪🇸 Español</button>
+                    <button data-lang="fr">🇫🇷 Français</button>
+                    <button data-lang="de">🇩🇪 Deutsch</button>
+                    <button data-lang="zh">🇨🇳 中文</button>
+                    <button data-lang="ja">🇯🇵 日本語</button>
+                    <button data-lang="ko">🇰🇷 한국어</button>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<section style="padding: 120px 0 40px;">
+    <div class="container">
+        <a href="swift-dashboard.html" class="btn-back">← Back to Dashboard</a>
+        <h1 class="section-title"><span class="text-gold">pacs.004</span> Payment Return</h1>
+        <p class="section-subtitle">Return Payment — Full or Partial Refund</p>
+        <div style="text-align:center;color:#888;font-size:0.85rem;margin-top:-10px;">
+            <span class="tag-badge">ISO 20022</span> <span class="tag-badge">Refund</span> <span class="tag-badge">Return</span>
+        </div>
+    </div>
+</section>
+
+<section style="padding: 20px 0 60px;">
+    <div class="container">
+        <div class="swift-form">
+
+            <div class="form-section">
+                <h3>↩️ Original Transaction</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Original Message ID <span class="field-tag">&lt;OrgnlMsgId&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="TO20260628001" value="TO20260628001" />
+                    </div>
+                    <div class="form-group">
+                        <label>Original UETR <span class="field-tag">&lt;OrgnlUETR&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="text" class="form-input code" placeholder="a85f1801-130b-4f7d-ac7b-4de982c16674" value="a85f1801-130b-4f7d-ac7b-4de982c16674" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Original Amount <span class="field-tag">&lt;OrgnlAmt&gt;</span></label>
+                        <input type="text" class="form-input" value="5000.00" readonly style="color:#f9a825;" />
+                    </div>
+                    <div class="form-group">
+                        <label>Return Amount <span class="field-tag">&lt;RtrAmt&gt;</span> <span class="mandatory">*</span></label>
+                        <input type="number" class="form-input" placeholder="5000.00" value="5000.00" step="0.01" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Return Type <span class="field-tag">&lt;RtrTp&gt;</span></label>
+                        <select class="form-select">
+                            <option value="FULL" selected>FULL — Full Return</option>
+                            <option value="PART">PART — Partial Return</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Return Reason <span class="field-tag">&lt;RtrRsn&gt;</span> <span class="mandatory">*</span></label>
+                        <select class="form-select">
+                            <option value="AC01">AC01 — Incorrect account</option>
+                            <option value="AC04">AC04 — Closed account</option>
+                            <option value="AM01">AM01 — Amount error</option>
+                            <option value="BE01">BE01 — Invalid beneficiary</option>
+                            <option value="CUST">CUST — Customer request</option>
+                            <option value="DUPL">DUPL — Duplicate</option>
+                            <option value="FROZ">FROZ — Frozen account</option>
+                            <option value="NARR" selected>NARR — Narrative</option>
+                            <option value="TECH">TECH — Technical error</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Return Reason Text <span class="field-tag">&lt;RtrRsnInf/Txt&gt;</span></label>
+                    <input type="text" class="form-input" placeholder="Reason for return" value="Customer requested refund" />
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>👤 Original Debtor (Payer)</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name <span class="field-tag">&lt;Nm&gt;</span></label>
+                        <input type="text" class="form-input" value="FIRMA SP.Z.O.O" readonly style="color:#888;" />
+                    </div>
+                    <div class="form-group">
+                        <label>Account (IBAN) <span class="field-tag">&lt;IBAN&gt;</span></label>
+                        <input type="text" class="form-input code" value="PL61109010140000071219812874" readonly style="color:#888;" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>🏦 Original Creditor (Beneficiary)</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name <span class="field-tag">&lt;Nm&gt;</span></label>
+                        <input type="text" class="form-input" value="COMPANY LTD" readonly style="color:#888;" />
+                    </div>
+                    <div class="form-group">
+                        <label>Account (IBAN) <span class="field-tag">&lt;IBAN&gt;</span></label>
+                        <input type="text" class="form-input code" value="CH7804835123456789012" readonly style="color:#888;" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>📄 XML Preview</h3>
+                <div class="xml-preview">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.004.001.09"&gt;
+  &lt;PmtRtr&gt;
+    &lt;GrpHdr&gt;
+      &lt;MsgId&gt;RTR20260628001&lt;/MsgId&gt;
+      &lt;CreDtTm&gt;2026-06-28T11:00:00Z&lt;/CreDtTm&gt;
+    &lt;/GrpHdr&gt;
+    &lt;TxInf&gt;
+      &lt;OrgnlTxRef&gt;
+        &lt;OrgnlMsgId&gt;TO20260628001&lt;/OrgnlMsgId&gt;
+        &lt;OrgnlUETR&gt;a85f1801-130b-4f7d-ac7b-4de982c16674&lt;/OrgnlUETR&gt;
+        &lt;RtrAmt Ccy="USD"&gt;5000.00&lt;/RtrAmt&gt;
+        &lt;RtrRsn&gt;
+          &lt;Rsn&gt;
+            &lt;Prtry&gt;CUST&lt;/Prtry&gt;
+          &lt;/Rsn&gt;
+          &lt;AddtlInf&gt;Customer requested refund&lt;/AddtlInf&gt;
+        &lt;/RtrRsn&gt;
+      &lt;/OrgnlTxRef&gt;
+      &lt;RtrdTxInf&gt;
+        &lt;Dbtr&gt;&lt;Nm&gt;COMPANY LTD&lt;/Nm&gt;&lt;/Dbtr&gt;
+        &lt;DbtrAcct&gt;&lt;Id&gt;&lt;IBAN&gt;CH7804835123456789012&lt;/IBAN&gt;&lt;/Id&gt;&lt;/DbtrAcct&gt;
+        &lt;Cdtr&gt;&lt;Nm&gt;FIRMA SP.Z.O.O&lt;/Nm&gt;&lt;/Cdtr&gt;
+        &lt;CdtrAcct&gt;&lt;Id&gt;&lt;IBAN&gt;PL61109010140000071219812874&lt;/IBAN&gt;&lt;/Id&gt;&lt;/CdtrAcct&gt;
+      &lt;/RtrdTxInf&gt;
+    &lt;/TxInf&gt;
+  &lt;/PmtRtr&gt;
+&lt;/Document&gt;
+                </div>
+            </div>
+
+            <button class="btn-submit-swift" onclick="submitReturn()">↩️ Submit Payment Return</button>
+            <div id="result" style="text-align:center;margin-top:12px;font-size:0.9rem;color:#888;"></div>
+
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="socials">
+            <a href="#">🐦 Twitter</a>
+            <a href="#">💬 Telegram</a>
+            <a href="#">📊 GeckoTerminal</a>
+            <a href="#">📈 CoinGecko</a>
+        </div>
+        <p style="margin-top:20px; color:#444;">© 2026 PACS Protocol. Built on Solana.</p>
+    </div>
+</footer>
+
+<script>
+    function submitReturn() {
+        const result = document.getElementById('result');
+        result.textContent = '⏳ Processing return payment...';
+        result.style.color = '#f9a825';
+        setTimeout(() => {
+            result.innerHTML = '✅ Return Payment Submitted!<br><span style="font-size:0.8rem;color:#888;">Reference: <span style="color:#f9a825;">RTR20260628001</span><br>Original: <span style="color:#f9a825;">TO20260628001</span></span>';
+            result.style.color = '#4caf50';
+        }, 1500);
+    }
+
+    // Language switcher
+    const translations = {
+        en: { 'nav-home': 'Home','nav-about':'About','nav-tokenomics':'Tokenomics','nav-buy-swift':'Buy SWIFT','nav-swift':'SWIFT MX','nav-liquidity':'Liquidity','nav-staking':'Staking','nav-pay':'PACS Pay','connect-wallet':'Connect Wallet' },
+        ru: { 'nav-home':'Главная','nav-about':'О токене','nav-tokenomics':'Токеномика','nav-buy-swift':'Купить SWIFT','nav-swift':'SWIFT MX','nav-liquidity':'Ликвидность','nav-staking':'Стейкинг','nav-pay':'PACS Pay','connect-wallet':'Подключить кошелёк' }
+    };
+
+    let currentLang = localStorage.getItem('pacsLang') || 'en';
+    function applyLanguage(lang) {
+        if (!translations[lang]) return;
+        const t = translations[lang];
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (t[key]) el.textContent = t[key];
+        });
+        document.getElementById('currentLangLabel').textContent = lang.toUpperCase();
+        localStorage.setItem('pacsLang', lang);
+    }
+    document.getElementById('langToggle').addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.getElementById('langDropdown').classList.toggle('show');
+    });
+    document.addEventListener('click', () => {
+        document.getElementById('langDropdown').classList.remove('show');
+    });
+    document.querySelectorAll('.lang-dropdown button').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            applyLanguage(btn.dataset.lang);
+            document.getElementById('langDropdown').classList.remove('show');
+        });
+    });
+    applyLanguage(currentLang);
+</script>
+
+</body>
+</html>
